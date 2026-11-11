@@ -48,7 +48,8 @@
     "typecheck": "tsc --noEmit -p .",
     "test": "node --test test/*.test.mjs",
     "screenshots": "node scripts/screenshots.mjs",
-    "check": "npm run typecheck && npm test"
+    "check": "npm run typecheck && npm test",
+    "readme-images": "node scripts/readme-images.mjs"
   },
   "peerDependencies": {
     "bootstrap-icons": "^1.11.0",
