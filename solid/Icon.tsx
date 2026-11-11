@@ -6,15 +6,18 @@ export interface IconProps {
   name: string;
   size?: number | string;
   color?: string;
+  /** Rotate continuously (`.ds-spin`), e.g. a refresh icon while checking. */
+  spin?: boolean;
   class?: string;
   style?: JSX.CSSProperties;
   title?: string;
+  onClick?: (ev: MouseEvent) => void;
 }
 
 export function Icon(props: IconProps) {
   return (
     <i
-      class={`bi bi-${props.name}${props.class ? ` ${props.class}` : ""}`}
+      class={`bi bi-${props.name}${props.spin ? " ds-spin" : ""}${props.class ? ` ${props.class}` : ""}`}
       style={{
         ...(props.size !== undefined ? { "font-size": typeof props.size === "number" ? `${props.size}px` : props.size } : {}),
         ...(props.color ? { color: props.color } : {}),
@@ -22,6 +25,7 @@ export function Icon(props: IconProps) {
       }}
       title={props.title}
       aria-hidden={props.title ? undefined : "true"}
+      onClick={props.onClick}
     />
   );
 }

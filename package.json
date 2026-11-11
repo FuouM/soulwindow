@@ -1,6 +1,6 @@
 {
   "name": "soulwindow",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "SoulWindow: the WinForms-style design system shared by DynastyReader, Lyric-Sync, probable-video-editor and Project-Curator.",
   "license": "MIT",
   "type": "module",
@@ -11,6 +11,7 @@
     "css",
     "runtime",
     "solid",
+    "dist",
     "vanilla",
     "README.md",
     "AGENTS.md"
@@ -27,14 +28,19 @@
       "default": "./runtime/vite.js"
     },
     "./solid": {
-      "solid": "./solid/index.ts",
-      "types": "./solid/index.ts",
-      "default": "./solid/index.ts"
+      "types": "./dist/types/index.d.ts",
+      "solid": "./dist/source/index.js",
+      "default": "./dist/esm/index.js"
     },
     "./solid/pro": {
-      "solid": "./solid/pro/index.ts",
-      "types": "./solid/pro/index.ts",
-      "default": "./solid/pro/index.ts"
+      "types": "./dist/types/pro/index.d.ts",
+      "solid": "./dist/source/pro/index.js",
+      "default": "./dist/esm/pro/index.js"
+    },
+    "./solid/store": {
+      "types": "./dist/types/store.d.ts",
+      "solid": "./dist/source/store.js",
+      "default": "./dist/esm/store.js"
     },
     "./vanilla": {
       "types": "./vanilla/index.d.ts",
@@ -44,11 +50,14 @@
   },
   "scripts": {
     "dev": "vite showcase",
+    "build": "npm run clean && tsc -p tsconfig.build.json && vite build --config vite.lib.config.ts",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "prepare": "npm run build",
     "build:showcase": "vite build showcase",
     "typecheck": "tsc --noEmit -p .",
     "test": "node --test test/*.test.mjs",
     "screenshots": "node scripts/screenshots.mjs",
-    "check": "npm run typecheck && npm test",
+    "check": "npm run typecheck && npm test && npm run build",
     "readme-images": "node scripts/readme-images.mjs"
   },
   "peerDependencies": {

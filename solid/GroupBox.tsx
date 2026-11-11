@@ -45,6 +45,7 @@ export function GroupBox(props: GroupBoxProps) {
             class="group-box-collapse-btn"
             aria-label={props.collapsed ? label("expandSection") : label("collapseSection")}
             aria-expanded={!props.collapsed}
+            title={props.collapsed ? label("expandSection") : label("collapseSection")}
             onClick={(ev) => {
               ev.stopPropagation();
               props.onToggle?.();

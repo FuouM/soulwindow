@@ -5,6 +5,7 @@ import { createColorKit } from "../runtime/color-kit.js";
 import { bootScript } from "../runtime/boot.js";
 import { seg7Html } from "../runtime/seg7.js";
 import { readFileSync, readdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 const kit = createColorKit();
 
@@ -59,6 +60,6 @@ test("CSS has no hex colours outside the token and theme files", () => {
       }
     }
   };
-  walk(new URL("../css", import.meta.url).pathname);
+  walk(fileURLToPath(new URL("../css", import.meta.url)));
   assert.deepEqual(offenders, []);
 });

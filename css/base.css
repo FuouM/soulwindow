@@ -3,7 +3,7 @@
  *   .input-field / .input-wrapper / .input-clear-btn, .ds-select
  *   .group-box (title, actions, collapse)
  *   .tag-pill (+ taxonomy modifiers)
- *   .ds-loading-screen, .ds-btn-spinner, text helpers (.ds-muted, .ds-label, .ds-icon-text)
+ *   .ds-loading-screen, .ds-btn-spinner, .ds-spin, text helpers (.ds-muted, .ds-label, .ds-icon-text)
  * Sizes come from density tokens and colours from theme tokens, so nothing here is per-theme. */
 @layer base {
   .bi {
@@ -90,7 +90,6 @@
     padding: 2px 7px;
   }
   .ds-btn-xs {
-    height: var(--sw-control-h-sm);
     font-size: var(--font-xs);
     padding: 1px 6px;
   }
@@ -138,6 +137,15 @@
     animation: ds-btn-spin 0.7s linear infinite;
   }
   @keyframes ds-btn-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  /* Spinning icon (<Icon spin>). */
+  .ds-spin {
+    animation: ds-spin-anim 0.8s linear infinite;
+  }
+  @keyframes ds-spin-anim {
     to {
       transform: rotate(360deg);
     }
@@ -271,6 +279,20 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     flex: 0 1 auto;
+  }
+  /* An IconText title truncates its label, never its icon. */
+  .group-box-title .ds-icon-text {
+    max-width: 100%;
+  }
+  .group-box-title .ds-icon-text > :not(svg, i, .bi, .ds-icon-inline, .ds-muted) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 0 1 auto;
+  }
+  .group-box-title :is(.ds-icon-inline, .ds-icon-text > svg, .ds-icon-text > i, .ds-icon-text > .bi, .ds-icon-text > .ds-muted) {
+    flex-shrink: 0;
   }
   .group-box-title--collapsible {
     cursor: pointer;
@@ -466,7 +488,8 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .ds-btn-spinner,
-    .ds-yinyang-spinner {
+    .ds-yinyang-spinner,
+    .ds-spin {
       animation: none;
     }
     .ds-btn-spinner {

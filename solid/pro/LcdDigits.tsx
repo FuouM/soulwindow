@@ -1,6 +1,6 @@
 /** Seven-segment readout for `.daw-lcd` (pro layer). */
 import { For, Index } from "solid-js";
-import { LIT, SEGS, SHAPE } from "../../runtime/seg7.js";
+import { LIT, SEGS, SHAPE } from "soulwindow/runtime";
 
 function Digit(props: { ch: string }) {
   return (

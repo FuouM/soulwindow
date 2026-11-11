@@ -54,8 +54,10 @@ showcase/     every component in every theme and density (npm run dev)
 ## Use it
 
 ```sh
-npm install github:FuouM/soulwindow#v0.1.0     # or: bun add github:FuouM/soulwindow#v0.1.0
+npm install github:FuouM/soulwindow#v0.2.0     # or: bun add github:FuouM/soulwindow#v0.2.0
 ```
+
+Installing from git runs `prepare`, which builds `dist/` (the Solid components). CSS, `runtime/` and `vanilla/` are plain files and need no build.
 
 ```ts
 // vite.config.ts: paints the saved theme before first paint (no white flash in dark mode)
@@ -148,7 +150,8 @@ Put app styles in `@layer app { … }`. Unlayered CSS beats every layer, so it o
 ```sh
 npm install
 npm run dev              # showcase on localhost
-npm run check            # typecheck + tests (tests include: no hex colours outside tokens/themes)
+npm run build            # dist/: esm (compiled Solid), source (JSX kept, for the `solid` export condition), types
+npm run check            # typecheck + tests + build (tests include: no hex colours outside tokens/themes)
 npm run build:showcase && npm run screenshots   # PNGs of every theme × density into screenshots/
 npm run build:showcase && npm run readme-images # regenerate the images in docs/images/ for this README
 ```

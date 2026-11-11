@@ -1,0 +1,14 @@
+{
+  // Emits the Solid components twice over: JSX-preserved sources for the `solid` export condition
+  // (the app's vite-plugin-solid compiles them) and the .d.ts files. dist/esm comes from vite.lib.config.ts.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "allowJs": false,
+    "rootDir": "solid",
+    "outDir": "dist/source",
+    "declaration": true,
+    "declarationDir": "dist/types"
+  },
+  "include": ["solid"]
+}

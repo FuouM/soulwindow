@@ -37,6 +37,7 @@ export interface ResolvedOptions {
   legacyClassPrefix: string | null;
 }
 
-export const DEFAULT_THEMES: Record<string, ThemeDef>;
+export type CoreThemeId = "light" | "dark" | "high-contrast";
+export const DEFAULT_THEMES: Readonly<Record<CoreThemeId, ThemeDef>>;
 export const DENSITIES: readonly Density[];
 export function resolveOptions(o?: SoulWindowOptions): ResolvedOptions;

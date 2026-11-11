@@ -1,7 +1,6 @@
 // Solid adapter for the framework-free controller: the same state, as signals.
 import { createSignal, getOwner, onCleanup, type Accessor } from "solid-js";
-import type { SoulWindow } from "../runtime/soulwindow";
-import type { Density } from "../runtime/config";
+import type { Density, SoulWindow } from "soulwindow/runtime";
 
 export interface SoulWindowSignals {
   theme: Accessor<string>;

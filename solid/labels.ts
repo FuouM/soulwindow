@@ -1,5 +1,8 @@
 // The few words SoulWindow components say on their own. Apps with i18n call setLabels() once at
-// startup (and again when the language changes) with their translations.
+// startup (and again when the language changes) with their translations. The labels live in a
+// store, so components already on screen re-render with the new words.
+import { createStore } from "solid-js/store";
+
 export interface SoulWindowLabels {
   close: string;
   clear: string;
@@ -11,7 +14,7 @@ export interface SoulWindowLabels {
   loading: string;
 }
 
-const labels: SoulWindowLabels = {
+const [labels, setStore] = createStore<SoulWindowLabels>({
   close: "Close",
   clear: "Clear",
   retry: "Retry",
@@ -20,10 +23,10 @@ const labels: SoulWindowLabels = {
   expandSection: "Expand section",
   collapseSection: "Collapse section",
   loading: "Loading",
-};
+});
 
 export function setLabels(next: Partial<SoulWindowLabels>): void {
-  Object.assign(labels, next);
+  setStore(next);
 }
 
 export function label(key: keyof SoulWindowLabels): string {

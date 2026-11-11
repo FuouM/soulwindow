@@ -44,7 +44,7 @@
 
     /* ── density (desktop defaults; density.css overrides) ─── */
     --sw-control-h: 24px;      /* buttons, inputs, selects, segmented switches, sub-tabs */
-    --sw-control-h-sm: 20px;   /* buttons inside group-box headers, .ds-btn-xs */
+    --sw-control-h-sm: 20px;   /* buttons inside group-box headers */
     --sw-icon-btn: 24px;       /* square icon-only buttons */
     --sw-row-action: 24px;     /* action buttons at the end of a list row */
     --sw-control-pad-x: 10px;
