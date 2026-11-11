@@ -1,0 +1,107 @@
+/* SoulWindow — mobile.css: layout changes for data-density="touch" (sizes live in density.css).
+ *   - dialogs become full-screen sheets that respect the safe area
+ *   - sub-tab rows scroll sideways instead of wrapping
+ *   - row actions drop their text and become square touch targets
+ *   - settings rows stack */
+@layer mobile {
+  [data-density="touch"] .ds-modal-backdrop {
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+  [data-density="touch"] .ds-modal-window {
+    width: 100% !important; /* beats the inline width the Modal component sets on desktop */
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  [data-density="touch"] .ds-modal-header {
+    height: calc(var(--sw-header-h) + env(safe-area-inset-top, 0px));
+    padding: calc(4px + env(safe-area-inset-top, 0px)) calc(8px + env(safe-area-inset-right, 0px)) 4px
+      calc(8px + env(safe-area-inset-left, 0px));
+  }
+  [data-density="touch"] .ds-modal-header .win-button.ds-btn-icon {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  [data-density="touch"] .ds-modal-footer {
+    padding: 6px max(14px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px))
+      max(14px, env(safe-area-inset-left, 0px));
+  }
+  /* Opt out per dialog for small confirm prompts that should stay centred. */
+  [data-density="touch"] .ds-modal-backdrop.ds-modal--floating {
+    padding: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+  [data-density="touch"] .ds-modal--floating .ds-modal-window {
+    height: auto;
+    border: 1px solid var(--sys-border-dark);
+    border-radius: var(--radius-2);
+  }
+
+  [data-density="touch"] .ds-subtabs {
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  [data-density="touch"] .ds-subtabs-left {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-right: 16px;
+  }
+  [data-density="touch"] .ds-subtabs-left::-webkit-scrollbar {
+    display: none;
+  }
+  [data-density="touch"] .ds-subtab {
+    flex-shrink: 0;
+  }
+  [data-density="touch"] .ds-subtabs-right {
+    width: 100%;
+  }
+
+  [data-density="touch"] .ds-item-actions .win-button {
+    width: var(--sw-row-action);
+    min-width: var(--sw-row-action);
+    padding: 0;
+    font-size: 14px;
+  }
+  [data-density="touch"] .ds-item-actions .win-button .ds-btn-text {
+    display: none;
+  }
+
+  [data-density="touch"] .ds-settings-row:not(:has(.ds-switch)) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  [data-density="touch"] .ds-settings-row:not(:has(.ds-switch)) .ds-settings-row-label {
+    min-width: 0;
+  }
+  [data-density="touch"] .ds-settings-row:not(:has(.ds-switch)) .ds-settings-row-control {
+    margin-left: 0;
+  }
+  [data-density="touch"] .ds-settings-row:not(:has(.ds-switch)) .ds-segmented-switch {
+    display: flex;
+    width: 100%;
+  }
+  [data-density="touch"] .ds-settings-row:not(:has(.ds-switch)) .ds-segmented-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 6px;
+  }
+
+  /* Hover colours stick after a tap on touch screens; only show them for real pointers. */
+  @media (hover: none) {
+    [data-density="touch"] .ds-item[role="button"]:hover {
+      background: var(--sys-card-bg);
+      border-color: var(--sys-border-light);
+    }
+  }
+}

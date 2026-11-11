@@ -1,0 +1,516 @@
+/* SoulWindow — base.css: the primitives every app shares.
+ *   .win-button (+ .primary .active, size modifiers .ds-btn-compact/-sm/-xs/-icon, .ds-btn-danger)
+ *   .input-field / .input-wrapper / .input-clear-btn, .ds-select
+ *   .group-box (title, actions, collapse)
+ *   .tag-pill (+ taxonomy modifiers)
+ *   .ds-loading-screen, .ds-btn-spinner, text helpers (.ds-muted, .ds-label, .ds-icon-text)
+ * Sizes come from density tokens and colours from theme tokens, so nothing here is per-theme. */
+@layer base {
+  .bi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+  }
+
+  /* ── Button ─────────────────────────────────────────────── */
+  .win-button {
+    background-color: var(--sys-button-bg);
+    color: var(--sys-control-text);
+    border: 1px solid var(--sys-button-border);
+    border-radius: 0;
+    padding: 2px var(--sw-control-pad-x);
+    height: var(--sw-control-h);
+    cursor: pointer;
+    font-size: var(--font-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    user-select: none;
+    line-height: normal;
+  }
+  .win-button i,
+  .win-button .bi,
+  .ds-btn-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .ds-btn-text {
+    white-space: nowrap;
+  }
+  @media (hover: hover) {
+    .win-button:hover {
+      background-color: var(--sys-button-hover);
+      border-color: var(--sys-border-focus);
+    }
+  }
+  .win-button:active {
+    background-color: var(--sys-button-active);
+    border-color: var(--sys-primary-border);
+  }
+  .win-button:disabled,
+  .win-button[aria-disabled="true"] {
+    background-color: var(--sys-button-disabled-bg);
+    color: var(--sys-button-disabled-text);
+    border-color: var(--sys-button-disabled-border);
+    cursor: not-allowed;
+  }
+  .win-button.primary,
+  .win-button.active {
+    background-color: var(--sys-button-primary-bg);
+    color: var(--sys-highlight-text);
+    border-color: var(--sys-button-primary-border);
+  }
+  .win-button.active {
+    font-weight: 600;
+  }
+  @media (hover: hover) {
+    .win-button.primary:hover,
+    .win-button.active:hover {
+      background-color: var(--sys-button-primary-hover);
+      border-color: var(--sys-button-primary-hover);
+    }
+  }
+  .win-button.primary:active {
+    background-color: var(--sys-button-primary-active);
+    border-color: var(--sys-button-primary-active);
+  }
+
+  /* Size modifiers. One of these is always present (the Solid Button picks a default). */
+  .ds-btn-compact {
+    font-size: var(--font-sm);
+    padding: 2px 8px;
+  }
+  .ds-btn-sm {
+    font-size: var(--font-sm);
+    padding: 2px 7px;
+  }
+  .ds-btn-xs {
+    height: var(--sw-control-h-sm);
+    font-size: var(--font-xs);
+    padding: 1px 6px;
+  }
+  .ds-btn-icon,
+  .ds-btn-icon-sm {
+    width: var(--sw-icon-btn);
+    min-width: var(--sw-icon-btn);
+    height: var(--sw-icon-btn);
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    font-size: var(--font-md);
+    flex-shrink: 0;
+  }
+  .ds-btn-icon-sm {
+    width: var(--sw-control-h-sm);
+    min-width: var(--sw-control-h-sm);
+    height: var(--sw-control-h-sm);
+    font-size: var(--font-sm);
+  }
+  .ds-btn-icon .ds-btn-text,
+  .ds-btn-icon-sm .ds-btn-text {
+    display: none;
+  }
+
+  .win-button.ds-btn-danger {
+    background-color: var(--ds-danger-btn-bg);
+    border-color: var(--ds-danger-btn-border);
+    color: var(--ds-danger-btn-text);
+  }
+  .win-button.ds-btn-danger:hover {
+    background-color: var(--ds-danger-btn-hover);
+    border-color: var(--ds-danger-btn-hover);
+  }
+  .win-button.ds-btn-danger:active {
+    background-color: var(--ds-danger-btn-active);
+    border-color: var(--ds-danger-btn-active);
+  }
+
+  .ds-btn-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: ds-btn-spin 0.7s linear infinite;
+  }
+  @keyframes ds-btn-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ── Focus ──────────────────────────────────────────────── */
+  .win-button:focus-visible,
+  button:focus-visible,
+  .ds-item:focus-visible,
+  .tag-pill:focus-visible,
+  [role="button"]:focus-visible,
+  [role="radio"]:focus-visible,
+  [role="tab"]:focus-visible {
+    outline: 2px solid var(--sw-focus-ring);
+    outline-offset: 1px;
+  }
+  :root[data-theme="high-contrast"] :is(.win-button, button, .ds-item, .tag-pill, [role="button"], [role="radio"], [role="tab"]):focus-visible {
+    outline-offset: 2px;
+  }
+
+  /* ── Input ──────────────────────────────────────────────── */
+  .input-field {
+    background-color: var(--sys-window-bg);
+    color: var(--sys-window-text);
+    border: 1px solid var(--sys-button-border);
+    padding: 0 8px;
+    height: var(--sw-control-h);
+    line-height: var(--sw-control-h);
+    font-size: var(--font-md);
+  }
+  .input-field:focus-visible {
+    outline: 2px solid var(--sw-focus-ring);
+    outline-offset: 1px;
+    border-color: var(--sys-border-focus);
+  }
+  .input-field:focus:not(:focus-visible) {
+    border-color: var(--sys-border-focus);
+    outline: none;
+  }
+  .input-field:disabled {
+    background-color: var(--sys-button-disabled-bg);
+    color: var(--sys-button-disabled-text);
+    border-color: var(--sys-button-disabled-border);
+  }
+  .ds-select {
+    font-size: var(--font-sm);
+    line-height: normal;
+    cursor: pointer;
+  }
+  textarea.input-field {
+    height: auto;
+    line-height: 1.4;
+    padding: 4px 8px;
+  }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+  .input-field.has-clear {
+    padding-right: 22px;
+    min-width: 0;
+    flex: 1;
+    width: 100%;
+  }
+  .input-clear-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--sys-text-muted);
+    font-size: var(--font-xs);
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-1);
+  }
+  .input-clear-btn:hover {
+    background-color: var(--sys-hover-bg);
+    color: var(--sys-window-text);
+  }
+  .input-clear-btn:active {
+    background-color: var(--sys-button-active);
+  }
+  .input-wrapper.has-value .input-clear-btn {
+    display: inline-flex;
+  }
+
+  /* ── Group box ──────────────────────────────────────────── */
+  .group-box {
+    border: 1px solid var(--sw-groupbox-border);
+    border-radius: 4px;
+    padding: 14px 10px 10px;
+    position: relative;
+    background: var(--sw-groupbox-bg);
+    margin-top: 8px;
+  }
+  .group-box-title {
+    position: absolute;
+    top: -9px;
+    left: 10px;
+    height: 18px;
+    line-height: 14px;
+    font-size: var(--font-sm);
+    background: var(--sw-groupbox-title-bg);
+    border: 1px solid var(--sw-groupbox-title-border);
+    border-radius: var(--radius-2);
+    padding: 1px 8px;
+    font-weight: 600;
+    color: var(--sw-groupbox-title-text);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: calc(100% - 20px - var(--ds-group-actions-w, 0px));
+    white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .group-box-title > :not(.group-box-collapse-btn, svg, i, .bi, .ds-icon-inline, .ds-muted) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 0 1 auto;
+  }
+  .group-box-title--collapsible {
+    cursor: pointer;
+  }
+  .group-box-title--collapsible:hover {
+    border-color: var(--sys-border-focus);
+  }
+  .group-box-actions {
+    position: absolute;
+    top: -10px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 1;
+  }
+  .group-box-actions .win-button {
+    height: var(--sw-control-h-sm);
+    font-size: var(--font-sm);
+    padding: 1px 6px;
+  }
+  .group-box-collapse-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-2);
+    color: var(--sw-groupbox-title-text);
+    font-size: var(--font-xs);
+    flex-shrink: 0;
+  }
+  .group-box-collapse-btn:hover {
+    background-color: var(--sw-ghost-hover-bg);
+    border-color: var(--sw-ghost-hover-border);
+    color: var(--sys-text-primary);
+  }
+  :root[data-theme="high-contrast"] .group-box-collapse-btn:is(:hover, :active) {
+    color: var(--sys-window-bg); /* black on the white hover fill */
+  }
+  .group-box-collapse-btn:active {
+    background-color: var(--sw-ghost-active-bg);
+    border-color: var(--sw-ghost-active-border);
+    transform: translateY(1px);
+  }
+  .group-box-collapse-btn i {
+    display: flex;
+    font-size: 11px;
+    -webkit-text-stroke: 0.3px currentColor;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .group-box.collapsed .group-box-collapse-btn i {
+    transform: rotate(-90deg);
+  }
+  .group-box.collapsed {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .group-box.collapsed .group-box-body {
+    display: none;
+  }
+  .group-box-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* ── Tag pill ───────────────────────────────────────────── */
+  .tag-pill {
+    font-size: var(--font-sm);
+    padding: 1px 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: var(--radius-1);
+    border: 1px solid var(--tag-meta-border);
+    background-color: var(--tag-meta-bg);
+    color: var(--tag-meta-text);
+    overflow-wrap: anywhere;
+    max-width: 220px;
+    cursor: pointer;
+    user-select: none;
+    transition: filter 0.15s ease, opacity 0.15s ease;
+  }
+  .tag-pill.tag-character {
+    background-color: var(--tag-character-bg);
+    border-color: var(--tag-character-border);
+    color: var(--tag-character-text);
+  }
+  .tag-pill.tag-character:hover {
+    background-color: var(--tag-character-hover-bg);
+    border-color: var(--tag-character-hover-border);
+    color: var(--tag-character-hover-text);
+  }
+  .tag-pill.tag-copyright {
+    background-color: var(--tag-copyright-bg);
+    border-color: var(--tag-copyright-border);
+    color: var(--tag-copyright-text);
+  }
+  .tag-pill.tag-copyright:hover {
+    background-color: var(--tag-copyright-hover-bg);
+    border-color: var(--tag-copyright-hover-border);
+    color: var(--tag-copyright-hover-text);
+  }
+  .tag-pill.tag-meta {
+    background-color: var(--tag-meta-bg);
+    border-color: var(--tag-meta-border);
+    color: var(--tag-meta-text);
+  }
+  .tag-pill.tag-meta:hover {
+    background-color: var(--tag-meta-hover-bg);
+    border-color: var(--tag-meta-hover-border);
+    color: var(--tag-meta-hover-text);
+  }
+  .tag-pill.tag-artist {
+    background-color: var(--tag-artist-bg);
+    border-color: var(--tag-artist-border);
+    color: var(--tag-artist-text);
+  }
+  .tag-pill.tag-artist:hover {
+    background-color: var(--tag-artist-hover-bg);
+    border-color: var(--tag-artist-hover-border);
+    color: var(--tag-artist-hover-text);
+  }
+  .tag-pill.tag-pairing {
+    background-color: var(--tag-pairing-bg);
+    border-color: var(--tag-pairing-border);
+    color: var(--tag-pairing-text);
+  }
+  .tag-pill.tag-pairing:hover {
+    background-color: var(--tag-pairing-hover-bg);
+    border-color: var(--tag-pairing-hover-border);
+    color: var(--tag-pairing-hover-text);
+  }
+  .tag-pill.tag-status {
+    background-color: var(--tag-status-bg);
+    border-color: var(--tag-status-border);
+    color: var(--tag-status-text);
+  }
+  .tag-pill.tag-status:hover {
+    background-color: var(--tag-status-hover-bg);
+    border-color: var(--tag-status-hover-border);
+    color: var(--tag-status-hover-text);
+  }
+  .tag-pill.tag-rank-3 {
+    background-color: var(--tag-rank-3-bg);
+    border-color: var(--tag-rank-3-border);
+    color: var(--tag-rank-3-text);
+  }
+  .tag-pill.tag-rank-3:hover {
+    background-color: var(--tag-rank-3-hover-bg);
+    border-color: var(--tag-rank-3-hover-border);
+    color: var(--tag-rank-3-hover-text);
+  }
+
+  /* ── Loading ────────────────────────────────────────────── */
+  .ds-loading-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 16px;
+    min-height: 120px;
+    width: 100%;
+    gap: 8px;
+    user-select: none;
+  }
+  .ds-loading-screen--inline {
+    padding: 8px;
+    min-height: 0;
+    justify-content: flex-start;
+  }
+  .ds-yinyang-spinner {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    animation: ds-yinyang-rotate 1.2s linear infinite;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+  }
+  @keyframes ds-yinyang-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .ds-loading-text {
+    font-size: var(--font-md);
+    font-weight: 500;
+    color: var(--sys-window-text);
+    letter-spacing: 0.2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ds-btn-spinner,
+    .ds-yinyang-spinner {
+      animation: none;
+    }
+    .ds-btn-spinner {
+      border-top-color: currentColor;
+      opacity: 0.7;
+    }
+  }
+
+  /* ── Text helpers ───────────────────────────────────────── */
+  .ds-muted {
+    font-size: var(--font-sm);
+    color: var(--sys-text-muted);
+    font-style: italic;
+  }
+  .ds-label {
+    font-size: var(--font-md);
+    font-weight: 600;
+    color: var(--sys-window-text);
+  }
+  .ds-label-sm {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--sys-text-secondary);
+  }
+  .ds-icon-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+  .ds-icon-inline {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .ds-link {
+    color: var(--sys-link);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .ds-link:hover {
+    color: var(--sys-link-hover);
+    text-decoration: underline;
+  }
+  .ds-mono {
+    font-family: var(--sw-font-mono);
+  }
+}

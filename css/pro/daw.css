@@ -1,0 +1,594 @@
+/* SoulWindow pro — daw.css: the DAW / NLE layer shared by Lyric-Sync and probable-video-editor.
+ * Merged from Lyric-Sync's daw.css and probable-video-editor's daw.css. Uses the same --sys-* tokens
+ * as everything else, so the editors get every theme and accent for free.
+ * Use with data-density="compact" on the editor root.
+ *
+ *   .daw-app                     full-window column: menubar, transport, upper area, timeline, status bar
+ *   .daw-menubar / .daw-menu-*   classic menu bar with drop-down menus
+ *   .daw-transport / .daw-tbtn   transport bar and its buttons
+ *   .daw-lcd / .daw-seg7-*       VFD readout with seven-segment digits
+ *   .daw-upper / .daw-dock / .daw-center / .daw-panel(-title, -body)
+ *   .daw-tabs / .daw-tab         dock tabs
+ *   .daw-splitter                horizontal (default) or vertical (.daw-splitter--v) resize handle
+ *   .daw-track-header(s)         timeline lane headers beside a canvas
+ *   .daw-statusbar / .daw-status-cell / .daw-status-dot
+ *   .daw-chip                    small coloured status chips
+ * Buttons, inputs, group boxes and dialogs inside editors are the normal .win-button, .input-field,
+ * .group-box and .ds-modal-*; do not add .daw-btn copies. */
+@layer pro {
+  .daw-app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
+    background: var(--sys-control-bg);
+    color: var(--sys-control-text);
+    font: var(--font-md) / 1.35 var(--sw-font-ui);
+    user-select: none;
+  }
+  .daw-app input,
+  .daw-app textarea,
+  .daw-app [contenteditable] {
+    user-select: text;
+  }
+
+  /* ── Menu bar ───────────────────────────────────────────── */
+  .daw-menubar {
+    display: flex;
+    align-items: center;
+    height: var(--sw-menubar-h);
+    padding: 0 4px;
+    background: var(--sys-menu-bg);
+    border-bottom: 1px solid var(--sys-border-dark);
+    flex: none;
+  }
+  .daw-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px 0 2px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .daw-brand-icon {
+    width: 15px;
+    height: 15px;
+    flex: none;
+  }
+  .daw-menu {
+    position: relative;
+  }
+  .daw-menu-btn {
+    height: calc(var(--sw-menubar-h) - 2px);
+    padding: 0 8px;
+    border: 1px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    color: var(--sys-control-text);
+    cursor: pointer;
+    font-size: var(--font-md);
+  }
+  .daw-menu-btn:hover,
+  .daw-menu-btn--open {
+    background: var(--sys-button-hover);
+    border-color: var(--sys-border-focus);
+  }
+  .daw-menu-pop {
+    position: absolute;
+    top: calc(var(--sw-menubar-h) - 1px);
+    left: 0;
+    z-index: var(--z-dropdown);
+    min-width: 240px;
+    padding: 2px;
+    background: var(--sys-menu-bg);
+    border: 1px solid var(--sys-menu-border);
+    box-shadow: var(--sw-menu-shadow);
+  }
+  .daw-menu-item {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    align-items: center;
+    width: 100%;
+    height: var(--sw-menu-item-h);
+    padding: 0 8px 0 4px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--sys-control-text);
+    text-align: left;
+    cursor: pointer;
+  }
+  .daw-menu-item:is(:hover, :focus-visible):not(:disabled) {
+    background: var(--sys-highlight-bg);
+    color: var(--sys-highlight-text);
+    outline: none;
+  }
+  .daw-menu-item:disabled {
+    color: var(--sys-button-disabled-text);
+    cursor: not-allowed;
+  }
+  .daw-menu-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .daw-menu-shortcut {
+    padding-left: 20px;
+    color: var(--sys-text-secondary);
+    font-size: var(--font-sm);
+  }
+  .daw-menu-item:is(:hover, :focus-visible):not(:disabled) .daw-menu-shortcut {
+    color: inherit;
+  }
+  .daw-menu-sep {
+    height: 1px;
+    margin: 3px 2px;
+    background: var(--sys-border-medium);
+  }
+  .daw-menubar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 6px;
+  }
+  .daw-doc-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+  }
+  .daw-doc-path {
+    color: var(--sys-text-secondary);
+    font-weight: 400;
+  }
+  .daw-dirty-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sw-warn);
+  }
+
+  /* ── Transport ──────────────────────────────────────────── */
+  .daw-transport {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 52px;
+    padding: 0 8px;
+    background: var(--sys-control-bg);
+    border-bottom: 1px solid var(--sys-border-dark);
+    flex: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .daw-transport-group {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .daw-transport-spacer {
+    flex: 1;
+  }
+  .daw-tbtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 28px;
+    height: 26px;
+    padding: 0 6px;
+    border: 1px solid var(--sys-button-border);
+    border-radius: 0;
+    background: var(--sys-button-bg);
+    color: var(--sys-control-text);
+    font-size: var(--font-lg);
+    cursor: pointer;
+  }
+  .daw-tbtn:hover:not(:disabled) {
+    background: var(--sys-button-hover);
+    border-color: var(--sys-border-focus);
+  }
+  .daw-tbtn:active:not(:disabled) {
+    background: var(--sys-button-active);
+    border-color: var(--sys-primary-border);
+  }
+  .daw-tbtn:disabled {
+    background: var(--sys-button-disabled-bg);
+    color: var(--sys-button-disabled-text);
+    border-color: var(--sys-button-disabled-border);
+    cursor: not-allowed;
+  }
+  .daw-tbtn.daw-on {
+    background: var(--sys-highlight-bg);
+    color: var(--sys-highlight-text);
+    border-color: var(--sys-primary-border);
+  }
+  .daw-tbtn-play {
+    min-width: 38px;
+    font-size: 15px;
+    color: var(--sw-ok);
+  }
+  .daw-tbtn-play.daw-on {
+    background: var(--sw-ok-bg);
+    border-color: var(--sw-ok);
+    color: var(--sw-ok);
+  }
+  .daw-tbtn-record {
+    color: var(--sw-err);
+  }
+  .daw-tbtn--accent {
+    background: var(--sys-button-primary-bg);
+    border-color: var(--sys-button-primary-border);
+    color: var(--sys-highlight-text);
+    font-size: var(--font-md);
+    font-weight: 600;
+    padding: 0 10px;
+  }
+  .daw-tbtn--accent:hover:not(:disabled) {
+    background: var(--sys-button-primary-hover);
+    border-color: var(--sys-button-primary-hover);
+  }
+
+  /* ── VFD readout. Dark glass in every theme, by design. ── */
+  .daw-lcd {
+    height: 44px;
+    flex: 0 0 auto;
+    min-width: fit-content;
+    padding: 2px;
+    border-radius: var(--radius-1);
+    border: 1px solid var(--sys-button-border);
+    background: #000000;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8), 0 1px 0 var(--sys-border-light);
+  }
+  .daw-lcd-glass {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+    padding: 0 10px 0 8px;
+    overflow: hidden;
+    border-radius: var(--radius-1);
+    background: radial-gradient(ellipse at 50% 120%, rgba(40, 120, 130, 0.18), transparent 70%),
+      linear-gradient(#030607, #071012);
+    box-shadow: inset 0 0 0 1px #000, inset 0 2px 6px rgba(0, 0, 0, 0.9);
+  }
+  .daw-lcd-glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(168deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 38%, transparent 40%),
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.28) 0 1px, transparent 1px 3px);
+  }
+  .daw-lcd-ann {
+    font-size: 9px;
+    color: var(--lcd-ghost);
+  }
+  .daw-lcd-ann--on {
+    color: var(--lcd-amber);
+    text-shadow: 0 0 4px var(--lcd-amber-glow);
+  }
+  .daw-lcd-main {
+    font-size: 24px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .daw-lcd-sub {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 6px;
+    row-gap: 1.5px;
+    align-items: center;
+    font-size: 10px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .daw-lcd-label {
+    font: 700 7.5px/1 var(--sw-font-mono);
+    letter-spacing: 0.08em;
+    color: var(--lcd-dim);
+  }
+  /* A second colour for a value that must read apart from the live one (amber). */
+  .daw-lcd-amber {
+    --lcd-on: var(--lcd-amber);
+    --lcd-glow: var(--lcd-amber-glow);
+    --lcd-ghost: var(--lcd-amber-ghost);
+  }
+  /* `font-size: inherit` beats the reset's `* { font-size }`, so the em-based cells follow the readout. */
+  .daw-seg7-row {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 0.08em;
+    height: 1em;
+    font-size: inherit;
+    transform: skewX(-7deg);
+    color: var(--lcd-on);
+  }
+  .daw-seg7 {
+    height: 100%;
+    width: 0.6em;
+    font-size: inherit;
+    overflow: visible;
+    fill: var(--lcd-ghost);
+  }
+  .daw-seg7-narrow {
+    width: 0.2em;
+  }
+  .daw-seg7 .daw-seg7-on {
+    fill: currentColor;
+    filter: drop-shadow(0 0 1.5px var(--lcd-glow));
+  }
+  .daw-seg7-text {
+    font: 700 0.7em/1 var(--sw-font-mono);
+  }
+
+  /* ── Docks and panels ───────────────────────────────────── */
+  .daw-upper {
+    display: flex;
+    flex: 1 1 0;
+    min-height: 0;
+    gap: 1px;
+    background: var(--sys-border-dark);
+  }
+  .daw-dock {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    flex: none;
+    min-height: 0;
+    background: var(--sys-control-bg);
+  }
+  .daw-center {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-width: 0;
+    background: var(--sys-control-bg);
+  }
+  .daw-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    background: var(--sys-control-bg);
+  }
+  .daw-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: var(--sw-control-h);
+    padding: 0 8px;
+    flex: none;
+    background: var(--sys-control-bg);
+    border-bottom: 1px solid var(--sys-border-dark);
+    font-size: var(--font-sm);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .daw-panel-title-actions {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 2px;
+  }
+  .daw-panel-body {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: auto;
+    padding: 6px 8px;
+  }
+  .daw-tabs {
+    display: flex;
+    height: var(--sw-tab-h);
+    flex: none;
+    background: var(--sys-control-bg);
+    border-bottom: 1px solid var(--sys-border-dark);
+    padding-left: 4px;
+    gap: 2px;
+  }
+  .daw-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 10px;
+    border: 1px solid var(--sys-border-dark);
+    border-bottom: none;
+    border-radius: var(--radius-1) var(--radius-1) 0 0;
+    background: var(--sys-button-bg);
+    color: var(--sys-control-text);
+    font-size: var(--font-sm);
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    top: 1px;
+  }
+  .daw-tab:hover {
+    background: var(--sys-button-hover);
+  }
+  .daw-tab--active {
+    background: var(--sys-window-bg);
+    border-bottom: 1px solid var(--sys-window-bg);
+    font-weight: 600;
+    z-index: 1;
+  }
+  .daw-tab-count {
+    padding: 0 4px;
+    border-radius: var(--radius-1);
+    background: var(--sys-border-medium);
+    font-size: var(--font-xs);
+  }
+  .daw-tab--active .daw-tab-count {
+    background: var(--sys-highlight-bg);
+    color: var(--sys-highlight-text);
+  }
+
+  /* ── Splitter ───────────────────────────────────────────── */
+  .daw-splitter {
+    height: 4px;
+    flex: none;
+    background: var(--sys-control-bg);
+    border-top: 1px solid var(--sys-border-dark);
+    border-bottom: 1px solid var(--sys-border-dark);
+    cursor: row-resize;
+    touch-action: none;
+  }
+  .daw-splitter--v {
+    width: 4px;
+    height: auto;
+    border: none;
+    border-left: 1px solid var(--sys-border-dark);
+    border-right: 1px solid var(--sys-border-dark);
+    cursor: col-resize;
+  }
+  .daw-splitter:hover,
+  .daw-splitter.is-dragging {
+    background: var(--sys-border-focus);
+  }
+
+  /* ── Timeline frame (the lanes themselves are a canvas painted with --tl-* tokens) ── */
+  .daw-timeline-panel {
+    flex: none;
+    display: flex;
+    min-height: 0;
+    background: var(--sys-control-bg);
+  }
+  .daw-timeline {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--tl-bg);
+  }
+  .daw-timeline-canvas {
+    position: absolute;
+    top: 0;
+    display: block;
+    touch-action: none;
+  }
+  .daw-track-headers {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: var(--sys-control-bg);
+    border-right: 1px solid var(--sys-border-dark);
+  }
+  .daw-track-header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 6px 0 8px;
+    border-bottom: 1px solid var(--sys-border-medium);
+    background: var(--sys-control-bg);
+  }
+  .daw-track-header--ruler {
+    background: var(--sys-status-bg);
+  }
+  .daw-track-icon {
+    color: var(--sys-text-secondary);
+  }
+  .daw-track-title {
+    flex: 1;
+    font-size: var(--font-sm);
+    font-weight: 600;
+  }
+  .daw-track-header--ruler .daw-track-title {
+    color: var(--sys-text-secondary);
+    font-weight: 400;
+  }
+  .daw-track-tools {
+    display: flex;
+    gap: 2px;
+  }
+
+  /* ── Status bar ─────────────────────────────────────────── */
+  .daw-statusbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: var(--sw-statusbar-h);
+    padding: 0 8px;
+    flex: none;
+    background: var(--sys-status-bg);
+    border-top: 1px solid var(--sys-border-dark);
+    font-size: var(--font-sm);
+    color: var(--sys-status-text);
+  }
+  .daw-status-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    border-right: 1px solid var(--sys-border-medium);
+    padding-right: 10px;
+  }
+  .daw-status-cell:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+  .daw-status-cell--grow {
+    flex: 1;
+  }
+  .daw-status-msg {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: text;
+  }
+  .daw-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--sw-ok);
+    flex-shrink: 0;
+  }
+  .daw-status-dot--offline {
+    background-color: var(--sw-err);
+  }
+  .daw-status-dot--busy {
+    background-color: var(--sw-busy);
+  }
+
+  /* ── Chips ──────────────────────────────────────────────── */
+  .daw-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 16px;
+    padding: 0 6px;
+    border: 1px solid var(--sys-border-dark);
+    border-radius: var(--radius-1);
+    background: var(--sys-button-bg);
+    color: var(--sys-text-secondary);
+    font: 600 var(--font-xs) / 1 var(--sw-font-mono);
+    white-space: nowrap;
+  }
+  .daw-chip--ok {
+    color: var(--sw-ok);
+    border-color: var(--sw-ok);
+    background: var(--sw-ok-bg);
+  }
+  .daw-chip--warn {
+    color: var(--sw-warn);
+    border-color: var(--sw-warn);
+    background: var(--sw-warn-bg);
+  }
+  .daw-chip--err {
+    color: var(--ds-danger-text);
+    border-color: var(--ds-danger-border);
+    background: var(--ds-danger-bg);
+  }
+  .daw-chip--accent {
+    color: var(--sys-highlight-text);
+    border-color: var(--sys-primary-border);
+    background: var(--sys-highlight-bg);
+  }
+}

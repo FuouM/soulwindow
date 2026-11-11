@@ -1,0 +1,72 @@
+{
+  "name": "soulwindow",
+  "version": "0.1.0",
+  "description": "SoulWindow: the WinForms-style design system shared by DynastyReader, Lyric-Sync, probable-video-editor and Project-Curator.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "css",
+    "runtime",
+    "solid",
+    "vanilla",
+    "README.md",
+    "AGENTS.md"
+  ],
+  "exports": {
+    "./css": "./css/index.css",
+    "./css/*": "./css/*",
+    "./runtime": {
+      "types": "./runtime/index.d.ts",
+      "default": "./runtime/index.js"
+    },
+    "./vite": {
+      "types": "./runtime/vite.d.ts",
+      "default": "./runtime/vite.js"
+    },
+    "./solid": {
+      "solid": "./solid/index.ts",
+      "types": "./solid/index.ts",
+      "default": "./solid/index.ts"
+    },
+    "./solid/pro": {
+      "solid": "./solid/pro/index.ts",
+      "types": "./solid/pro/index.ts",
+      "default": "./solid/pro/index.ts"
+    },
+    "./vanilla": {
+      "types": "./vanilla/index.d.ts",
+      "default": "./vanilla/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "dev": "vite showcase",
+    "build:showcase": "vite build showcase",
+    "typecheck": "tsc --noEmit -p .",
+    "test": "node --test test/*.test.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "check": "npm run typecheck && npm test"
+  },
+  "peerDependencies": {
+    "bootstrap-icons": "^1.11.0",
+    "solid-js": "^1.9.0"
+  },
+  "peerDependenciesMeta": {
+    "solid-js": {
+      "optional": true
+    },
+    "bootstrap-icons": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "bootstrap-icons": "^1.13.1",
+    "solid-js": "^1.9.17",
+    "typescript": "^5.9.0",
+    "vite": "^6.0.0",
+    "vite-plugin-solid": "^2.11.14"
+  }
+}
