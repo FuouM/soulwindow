@@ -54,7 +54,7 @@ showcase/     every component in every theme and density (npm run dev)
 ## Use it
 
 ```sh
-npm install github:FuouM/soulwindow#v0.2.0     # or: bun add github:FuouM/soulwindow#v0.2.0
+npm install github:FuouM/soulwindow#v0.2.1     # or: bun add github:FuouM/soulwindow#v0.2.1
 ```
 
 Installing from git runs `prepare`, which builds `dist/` (the Solid components). CSS, `runtime/` and `vanilla/` are plain files and need no build.

@@ -231,13 +231,14 @@
     --lcd-amber-ghost: rgba(255, 182, 72, 0.09);
   }
 
-  /* Theme-switch guard. In the earliest layer so its !important beats every later layer. */
+  /* Theme-switch guard. In the earliest layer so its !important beats every later layer.
+   * Transitions only: toggling `animation` would restart every running keyframe animation
+   * (an open dialog fades in again, spinners jump) the moment the guard is removed. */
   html.ds-disable-transitions,
   html.ds-disable-transitions *,
   html.ds-disable-transitions *::before,
   html.ds-disable-transitions *::after {
     transition: none !important;
-    animation: none !important;
     scroll-behavior: auto !important;
   }
 }
