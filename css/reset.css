@@ -1,0 +1,78 @@
+/* SoulWindow — reset.css: box model, body, scrollbars, skeleton placeholders. */
+@layer reset {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--sw-font-ui);
+    font-size: var(--sw-font-base);
+  }
+
+  body {
+    background-color: var(--sys-control-bg);
+    color: var(--sys-control-text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  ::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--sys-scrollbar-track);
+    border: 1px solid var(--sys-scrollbar-track-border);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--sys-scrollbar-thumb);
+    border: 3px solid var(--sys-scrollbar-thumb-border);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--sys-scrollbar-thumb-hover);
+  }
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  .skeleton,
+  .skeleton-pulse {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--sys-control-bg);
+  }
+  .skeleton-pulse {
+    border-radius: var(--radius-2);
+  }
+  .skeleton::after,
+  .skeleton-pulse::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, var(--skeleton-shimmer) 50%, transparent 100%);
+    transform: translateX(-100%);
+    animation: ds-skeleton-slide 1.5s ease-in-out infinite;
+  }
+  .skeleton-card {
+    height: 80px;
+    border-radius: var(--radius-2);
+    background-color: var(--sys-control-bg);
+    border: 1px solid var(--sys-border-dark);
+  }
+  .skeleton-text {
+    height: 12px;
+    border-radius: var(--radius-1);
+  }
+  @keyframes ds-skeleton-slide {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton::after,
+    .skeleton-pulse::after {
+      animation: none;
+    }
+  }
+}

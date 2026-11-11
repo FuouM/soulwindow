@@ -1,0 +1,32 @@
+/* SoulWindow — density.css
+ * One attribute, three sizes. Set it on <html> (or any container):
+ *   data-density="compact"   DAW / NLE panels (Lyric-Sync, probable-video-editor)
+ *   (no attribute)           desktop default (DynastyReader desktop, Curator)
+ *   data-density="touch"     phones and tablets (DynastyReader mobile)
+ * Only sizes change here; colours come from themes. */
+@layer density {
+  [data-density="compact"] {
+    --sw-control-h: 22px;
+    --sw-control-h-sm: 18px;
+    --sw-icon-btn: 22px;
+    --sw-row-action: 22px;
+    --sw-control-pad-x: 8px;
+    --sw-header-h: 28px;
+    --sw-menubar-h: 24px;
+    --sw-menu-item-h: 22px;
+    --sw-tab-h: 24px;
+    --sw-statusbar-h: 22px;
+    --sw-row-pad: 3px 6px;
+  }
+
+  /* Touch keeps the 24px toolbar chrome DynastyReader uses on phones, and enlarges what a thumb
+   * actually aims at: row actions, sheet close buttons, settings rows. */
+  [data-density="touch"] {
+    --sw-control-h: 24px;
+    --sw-icon-btn: 24px;
+    --sw-row-action: 32px;
+    --sw-header-h: 32px;
+    --sw-menu-item-h: 32px;
+    --sw-row-pad: 8px 8px;
+  }
+}

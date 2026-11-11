@@ -1,0 +1,104 @@
+/* Showcase page layout only: app styles go in the `app` layer. */
+@layer app {
+  body {
+    overflow: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  .sc-page {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 12px 16px 40px;
+  }
+  .sc-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-topbar);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: var(--sys-menu-bg);
+    border-bottom: 1px solid var(--sys-border-dark);
+  }
+  .sc-brand {
+    font-weight: 700;
+    font-size: var(--font-lg);
+    margin-right: 8px;
+  }
+  .sc-swatches {
+    display: inline-flex;
+    gap: 3px;
+  }
+  .sc-swatch {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--sys-button-border);
+    cursor: pointer;
+    padding: 0;
+  }
+  .sc-swatch[aria-pressed="true"] {
+    outline: 2px solid var(--sys-control-text);
+    outline-offset: 1px;
+  }
+  .sc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 12px;
+  }
+  .sc-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .sc-tokens {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 4px;
+  }
+  .sc-token {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-xs);
+    font-family: var(--sw-font-mono);
+    min-width: 0;
+  }
+  .sc-token span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sc-chip {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    border: 1px solid var(--sys-border-dark);
+  }
+  .sc-daw {
+    height: 420px;
+    width: 100%;
+    border: 1px solid var(--sys-border-dark);
+  }
+  .sc-daw.daw-app {
+    height: 420px;
+    width: 100%;
+    overflow: auto;
+  }
+  .sc-daw .daw-upper {
+    min-width: 760px;
+  }
+  .sc-cover {
+    width: 36px;
+    height: 48px;
+    flex: none;
+    background: linear-gradient(135deg, var(--ds-accent-wall-1, #cfe0f3), var(--sys-primary));
+    border: 1px solid var(--sys-border-dark);
+  }
+}

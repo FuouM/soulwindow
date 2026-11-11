@@ -1,0 +1,23 @@
+/* SoulWindow — utilities.css: a small, fixed set. Add layout helpers to the app, not here. */
+@layer utilities {
+  .sw-row { display: flex; align-items: center; gap: var(--space-2); }
+  .sw-col { display: flex; flex-direction: column; gap: var(--space-2); }
+  .sw-wrap { flex-wrap: wrap; }
+  .sw-grow { flex: 1 1 auto; min-width: 0; }
+  .sw-gap-1 { gap: var(--space-1); }
+  .sw-gap-3 { gap: var(--space-3); }
+  .sw-gap-4 { gap: var(--space-4); }
+  .sw-gap-5 { gap: var(--space-5); }
+  .sw-hidden { display: none !important; }
+  .sw-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .sw-tabular { font-variant-numeric: tabular-nums; }
+  .sw-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

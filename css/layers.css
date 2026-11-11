@@ -1,0 +1,4 @@
+/* SoulWindow — the one cascade-layer order. Every app imports this first (index.css does).
+ * Apps put their own rules in `app`; `mobile` stays last so touch layouts win.
+ *   tokens → themes → density → reset → base → layout → components → pro → app → utilities → mobile */
+@layer tokens, themes, density, reset, base, layout, components, pro, app, utilities, mobile;
