@@ -6,7 +6,7 @@ Order: safest first. Each step is its own PR in that app's repo, pinned to a Sou
 
 | App | Stack | Style source | State |
 |---|---|---|---|
-| DynastyReader | Solid | `src/styles/` (origin of SoulWindow) | Most complete: 4 themes + Aero chrome, accent, UI scale, mobile. Per-context `!important` size overrides throughout `mobile.css`, `browse.css`, `cache.css`. Accent maths duplicated in `index.html` and `stores/accent-color.ts`, already drifted (head script has no high-contrast / Windows 7 rules). |
+| DynastyReader | Solid | `src/styles/` (origin of SoulWindow) | Most complete: light, dark, high contrast, plus a Windows 7 Aero add-on, accent, UI scale, mobile. Per-context `!important` size overrides throughout `mobile.css`, `browse.css`, `cache.css`. Accent maths duplicated in `index.html` and `stores/accent-color.ts`, already drifted (head script has no high-contrast / Windows 7 rules). |
 | Lyric-Sync `web/` | Solid | copy of DR's styles + `daw.css` (2.6k lines) | `tokens.css` identical to DR's; ~5.4k lines of DR CSS copied but never imported (`reader`, `browse`, `library`, `cache`, `mobile`, `settings`). `daw.css` re-implements buttons (`.daw-btn`, `.daw-seg`, `.daw-icon-btn`). |
 | probable-video-editor `app/` | plain TS | own `daw.css` (1.6k lines) | Own `--sys-*` values that **collide in meaning** (`--sys-border-light` is a dark grey there, the bevel highlight in DR). Dark only. Seven-segment code duplicated from Lyric-Sync as HTML strings. |
 | Curator dashboard | plain TS | `styles/*.css` | 20 hard-coded `--sys-*` (light only). Own scales: `--space-xs…`, `--text-*` 9/11/13/15px, `--z-modal: 9999`. |
@@ -14,9 +14,10 @@ Order: safest first. Each step is its own PR in that app's repo, pinned to a Sou
 
 ## 1. DynastyReader (first user; no visual change)
 
-1. `npm i github:FuouM/soulwindow#v0.1.0`; add `soulwindow({ storagePrefix: "ds-", metaId: "ds-theme-color-meta", density: "comfortable", themes })` to `vite.config.ts`, with `themes` = SoulWindow's four plus nothing else. `storagePrefix: "ds-"` keeps users' saved theme and accent.
+1. `npm i github:FuouM/soulwindow#v0.1.0`; add `soulwindow({ storagePrefix: "ds-", metaId: "ds-theme-color-meta", density: "comfortable", themes })` to `vite.config.ts`, with `themes` = `DEFAULT_THEMES` plus DR's `windows7` entry (see step 3). `storagePrefix: "ds-"` keeps users' saved theme and accent.
 2. Delete both `<script>` blocks and the inline `<style>` from `index.html` (the plugin injects the boot script). Delete `lib/color.ts`; `stores/theme.ts` and `stores/accent-color.ts` become thin wrappers over `createSoulWindow({ storagePrefix: "ds-", legacyClassPrefix: "ds-" })` + `useSoulWindow`, keeping their exported names so call sites do not change. `ACCENT_COLOR_PRESETS` = `sw.kit.PRESETS`.
-3. In `main.tsx` replace `tokens.css`, `themes/dark.css`, `themes/high-contrast.css`, `themes/windows7.css`, `reset.css`, `curator-ui-base.css` with `import "soulwindow/css"`. Keep `themes/windows7-aero.css` (DR's Aero chrome) and the view CSS.
+3. In `main.tsx` replace `tokens.css`, `themes/dark.css`, `themes/high-contrast.css`, `reset.css`, `curator-ui-base.css` with `import "soulwindow/css"`. Keep the view CSS.
+   Windows 7 stays in DR as an add-on theme (SoulWindow core does not ship it): register it through the `themes` option (`family: "light"`), keep `themes/windows7.css` and `themes/windows7-aero.css` in `@layer app`, and move the Win7 accent rules and the `--ds-accent-*` Aero tints (aero, active/hover/subtab gradients, badge, box, wall, topbar, taskbar) out of `stores/accent-color.ts` into a DR `aero-accent.ts` that sets them from `sw.kit` on `sw.subscribe()`.
 4. Rename the `reader` layer to `app` in DR's CSS (`@layer reader` → `@layer app`) and drop DR's own `@layer …` order statements (SoulWindow declares the order).
 5. Move the reader-only tokens that SoulWindow dropped into an `app`-layer block in DR: `--ds-reader-*`, `--sys-reader-viewport-bg`, `--ds-followed-corner*` (per theme).
 6. Set density from the platform: `sw.setDensity(isMobile() ? "touch" : "comfortable")`. Then delete the `#ds-root[data-mobile] … .win-button { width: 24px !important … }` blocks one by one, checking screenshots: most are already what the density tokens give.

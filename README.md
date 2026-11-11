@@ -40,7 +40,7 @@ export const sw = createSoulWindow({ storagePrefix: "myapp-", density: "auto" })
 import { Button, GroupBox, IconText, Icon, useSoulWindow } from "soulwindow/solid";
 
 const s = useSoulWindow(sw);         // s.theme(), s.accent(), s.density(), s.isDark()
-sw.setTheme("dark");                 // light | dark | high-contrast | windows7
+sw.setTheme("dark");                 // light | dark | high-contrast
 sw.setAccent("pink");                // preset id or any hex
 sw.setDensity("touch");              // compact | comfortable | touch
 
@@ -69,11 +69,21 @@ sw.subscribe(() => (tl = readTokens("--tl-"), repaint()));
 
 | Axis | Set by | Changes | Values |
 |---|---|---|---|
-| Theme | `data-theme` on `<html>` | colours only | `light`, `dark`, `high-contrast`, `windows7` |
-| Accent | inline custom properties from the runtime | `--sys-primary`, highlight, focus, link, `--ds-accent-*` | 10 presets or any hex |
+| Theme | `data-theme` on `<html>` | colours only | `light`, `dark`, `high-contrast` |
+| Accent | inline custom properties from the runtime | `--sys-accent`, `--sys-primary`, highlight, focus, link, primary buttons | 10 presets or any hex |
 | Density | `data-density` on `<html>` or any container | sizes only | `compact` (DAW), none (desktop), `touch` (phones) |
 
-They are independent: any theme with any accent at any density. An editor can sit at `compact` inside a page at desktop density (the showcase does this).
+They are independent: any theme with any accent at any density.
+
+### Add-on themes
+
+The core ships light, dark and high contrast. A styled theme such as Windows 7 Aero is an add-on that lives in the app (or later in its own package):
+
+```ts
+const sw = createSoulWindow({ themes: { ...DEFAULT_THEMES, windows7: { family: "light", label: "Windows 7", meta: "#3a8bdc", bg: "#d2e6f9", text: "#162030" } } });
+```
+
+plus its own `:root[data-theme="windows7"] { … }` tokens and chrome CSS in `@layer app`. `family` picks the accent rules it inherits; extra accent tints it needs (gradients, glass) are derived from `sw.kit` (`adjust`, `deepText`, `linkColor`) in a `sw.subscribe()` callback. An editor can sit at `compact` inside a page at desktop density (the showcase does this).
 
 ## Tokens
 
@@ -82,7 +92,7 @@ They are independent: any theme with any accent at any density. An editor can si
 | `--sys-*` | system colours | The public colour API. Use these. |
 | `--sw-*` | density sizes, component tokens, generic status (`--sw-ok/warn/err`) | New in SoulWindow. |
 | `--space-*`, `--font-*`, `--radius-*`, `--z-*` | scales | `--z-*` is the only allowed source of global z-index. |
-| `--ds-*` | status / danger backgrounds, accent tints | DynastyReader's names, kept for compatibility. Do not add more. |
+| `--ds-*` | status / danger colours | DynastyReader's names, kept for compatibility. Do not add more. |
 | `--tag-*` | tag taxonomy for `.tag-pill` | |
 | `--tl-*`, `--lcd-*` | pro: timeline canvas, VFD readout | |
 

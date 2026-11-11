@@ -25,7 +25,6 @@ const cases = [
   ["light", "comfortable", null, { width: 1280, height: 900 }],
   ["dark", "comfortable", null, { width: 1280, height: 900 }],
   ["high-contrast", "comfortable", null, { width: 1280, height: 900 }],
-  ["windows7", "comfortable", null, { width: 1280, height: 900 }],
   ["dark", "comfortable", "pink", { width: 1280, height: 900 }],
   ["light", "touch", null, { width: 390, height: 844 }],
   ["dark", "touch", null, { width: 390, height: 844 }],

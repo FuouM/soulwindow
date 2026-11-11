@@ -98,7 +98,7 @@
     width: 36px;
     height: 48px;
     flex: none;
-    background: linear-gradient(135deg, var(--ds-accent-wall-1, #cfe0f3), var(--sys-primary));
+    background: linear-gradient(135deg, var(--sys-button-hover), var(--sys-primary));
     border: 1px solid var(--sys-border-dark);
   }
 }

@@ -14,7 +14,7 @@ These rules apply in this repo **and** in every app that uses SoulWindow (Dynast
 
 ## In this repo
 
-- Every component works in all four themes and all three densities; check the showcase in each (`npm run screenshots`).
+- Every component works in all three themes and all three densities; check the showcase in each (`npm run screenshots`).
 - Themes change colours only; density changes sizes only. A component never has `[data-theme=…]` selectors: if a theme needs a different value, add a component token (`--sw-groupbox-title-bg`) and set it in the theme file. (The one exception is high-contrast focus/hover text that must be pure black or white.)
 - `runtime/color-kit.js` must stay self-contained (it is serialised into the `<head>` boot script). Plain ES5-ish JS, no imports, no outside references.
 - `runtime/*.js` and `vanilla/*.js` are plain JS with hand-written `.d.ts` beside them, so Node can load them (Vite config) without a build. Keep the `.d.ts` in step.

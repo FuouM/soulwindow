@@ -115,12 +115,13 @@ export function createColorKit() {
 
   /**
    * Every CSS custom property the accent drives, for one theme family.
-   * family: "light" | "dark" | "high-contrast" | "windows7".
+   * family: "light" | "dark" | "high-contrast". Add-on themes (Windows 7 …) pick the family
+   * closest to them and derive any extra tints themselves from the exported helpers.
    */
   function accentPalette(color, family) {
     var hex = resolveHex(color);
     var a = function (p) { return adjust(hex, p); };
-    var dark = family === "dark", hc = family === "high-contrast", w7 = family === "windows7";
+    var dark = family === "dark", hc = family === "high-contrast";
     var onDark = dark || hc;
     var contrast = contrastText(hex);
     var link = linkColor(hex, onDark);
@@ -134,12 +135,8 @@ export function createColorKit() {
     } else if (hc) {
       primary = a(25); primaryHover = a(38); primaryActive = a(10); primaryBorder = a(-10);
       borderFocus = a(30); buttonHover = a(-60); buttonActive = a(-45); link = a(25); linkHover = a(40);
-    } else if (w7) {
-      primary = a(-5); primaryHover = a(14); primaryActive = a(-18); primaryBorder = a(-25); borderFocus = a(10);
     }
 
-    var activeText = deepText(hex, 0.14, 0.75);
-    var lightTopbar = contrast === "#000000";
     return {
       "--sys-accent": hex,
       "--sys-primary": primary,
@@ -152,52 +149,11 @@ export function createColorKit() {
       "--sys-button-hover": buttonHover,
       "--sys-button-active": buttonActive,
       "--sys-button-primary-bg": hex,
-      "--sys-button-primary-border": w7 ? primaryBorder : a(-15),
+      "--sys-button-primary-border": a(-15),
       "--sys-button-primary-hover": onDark ? a(10) : a(-8),
       "--sys-button-primary-active": onDark ? a(-10) : a(-15),
       "--sys-link": link,
       "--sys-link-hover": linkHover,
-      // Aero colourisation (used by the windows7 theme and any app chrome that wants accent tints)
-      "--ds-accent-aero-light": a(25),
-      "--ds-accent-aero-mid": hex,
-      "--ds-accent-aero-dark": linkColor(hex, false),
-      "--ds-accent-aero-border": a(-32),
-      "--ds-accent-active-grad-1": a(90),
-      "--ds-accent-active-grad-2": a(77),
-      "--ds-accent-active-grad-3": a(60),
-      "--ds-accent-active-grad-4": a(41),
-      "--ds-accent-active-border": a(-25),
-      "--ds-accent-active-text": activeText,
-      "--ds-accent-hover-grad-1": a(92),
-      "--ds-accent-hover-grad-2": a(76),
-      "--ds-accent-hover-grad-3": a(66),
-      "--ds-accent-hover-border": a(8),
-      "--ds-accent-subtab-grad-1": a(85),
-      "--ds-accent-subtab-grad-2": a(72),
-      "--ds-accent-subtab-grad-3": a(56),
-      "--ds-accent-subtab-grad-4": a(78),
-      "--ds-accent-subtab-border": a(-25),
-      "--ds-accent-subtab-text": activeText,
-      "--ds-accent-badge-bg": a(68),
-      "--ds-accent-badge-border": a(38),
-      "--ds-accent-badge-text": deepText(hex, 0.16, 0.7),
-      "--ds-accent-box-bg-1": "#ffffff",
-      "--ds-accent-box-bg-2": a(75),
-      "--ds-accent-box-border": a(40),
-      "--ds-accent-divider": a(45),
-      "--ds-accent-wall-1": a(60),
-      "--ds-accent-wall-2": a(42),
-      "--ds-accent-wall-3": a(25),
-      "--ds-accent-topbar-1": a(32),
-      "--ds-accent-topbar-2": a(18),
-      "--ds-accent-topbar-3": hex,
-      "--ds-accent-topbar-4": a(24),
-      "--ds-accent-taskbar-1": a(35),
-      "--ds-accent-taskbar-2": a(20),
-      "--ds-accent-topbar-text": lightTopbar ? deepText(hex, 0.12, 0.75) : "#ffffff",
-      "--ds-accent-topbar-shadow": lightTopbar
-        ? "0 0 8px rgba(255, 255, 255, 0.95), 0 0 3px #ffffff, 0 1px 0 #ffffff"
-        : "0 1px 2px rgba(0, 0, 0, 0.65), 0 0 6px rgba(0, 0, 0, 0.35)",
     };
   }
 

@@ -18,7 +18,7 @@ test("resolveHex accepts presets, short and long hex, and falls back to the defa
 
 test("accentPalette covers the same keys for every theme family", () => {
   const keys = Object.keys(kit.accentPalette("teal", "light")).sort();
-  for (const f of ["dark", "high-contrast", "windows7"]) {
+  for (const f of ["dark", "high-contrast"]) {
     assert.deepEqual(Object.keys(kit.accentPalette("teal", f)).sort(), keys);
   }
   assert.equal(kit.accentPalette("#ffffff", "light")["--sys-highlight-text"], "#000000");

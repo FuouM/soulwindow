@@ -9,7 +9,6 @@ export const DEFAULT_THEMES = {
   light: { family: "light", label: "Light", meta: "#f5f5f5", bg: "#ececec", text: "#000000" },
   dark: { family: "dark", label: "Dark", meta: "#181818", bg: "#1e1e1e", text: "#e0e0e0" },
   "high-contrast": { family: "high-contrast", label: "High Contrast", meta: "#000000", bg: "#000000", text: "#ffffff" },
-  windows7: { family: "windows7", label: "Windows 7", meta: "#3a8bdc", bg: "#d2e6f9", text: "#162030" },
 };
 
 export const DENSITIES = /** @type {const} */ (["compact", "comfortable", "touch"]);

@@ -1,4 +1,4 @@
-export type ThemeFamily = "light" | "dark" | "high-contrast" | "windows7";
+export type ThemeFamily = "light" | "dark" | "high-contrast";
 
 export interface AccentPreset {
   id: string;

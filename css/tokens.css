@@ -2,7 +2,7 @@
  * Light palette (the default) plus every scale the system uses.
  * Naming:
  *   --sys-*   system colours (WinForms "SystemColors" style). The public colour API.
- *   --ds-*    status / danger / accent-derivation colours. Kept under their DynastyReader names so
+ *   --ds-*    status and danger colours. Kept under their DynastyReader names so
  *             existing apps keep working; new code may use them, just do not invent more --ds-* names.
  *   --tag-*   tag taxonomy colours used by .tag-pill.
  *   --sw-*    component and density tokens introduced by SoulWindow.
@@ -116,36 +116,6 @@
     --ds-partial-text: #92400e;
     --ds-partial-border: #d97706;
     /* Followed series indicator tokens — dynamically tracks user accent color */
-    /* Accent colorization tokens */
-    --ds-accent-aero-light: #4da6ff;
-    --ds-accent-aero-mid: #0078d4;
-    --ds-accent-aero-dark: #005a9e;
-    --ds-accent-aero-border: #004578;
-    --ds-accent-active-grad-1: #e5f4fc;
-    --ds-accent-active-grad-2: #c4e5f6;
-    --ds-accent-active-grad-3: #98d1ef;
-    --ds-accent-active-grad-4: #68b3db;
-    --ds-accent-active-border: #2c597c;
-    --ds-accent-active-text: #0f2440;
-    --ds-accent-hover-grad-1: #eaf6fd;
-    --ds-accent-hover-grad-2: #bee6fd;
-    --ds-accent-hover-grad-3: #a7d9f5;
-    --ds-accent-hover-border: #3c7fb1;
-    --ds-accent-subtab-grad-1: #d8ebff;
-    --ds-accent-subtab-grad-2: #b9d8f6;
-    --ds-accent-subtab-grad-3: #8fb9ea;
-    --ds-accent-subtab-grad-4: #c8ddf5;
-    --ds-accent-subtab-border: #2e6aa5;
-    --ds-accent-subtab-text: #0f2440;
-    --ds-accent-topbar-text: #ffffff;
-    --ds-accent-topbar-shadow: 0 1px 2px rgba(0, 0, 0, 0.65), 0 0 6px rgba(0, 0, 0, 0.35);
-    --ds-accent-badge-bg: #edf4fc;
-    --ds-accent-badge-border: #b8cde6;
-    --ds-accent-badge-text: #1b3d64;
-    --ds-accent-box-bg-1: #ffffff;
-    --ds-accent-box-bg-2: #f4f8fd;
-    --ds-accent-box-border: #b8cde6;
-    --ds-accent-divider: #d6e3f2;
     --tag-character-bg: #d1ecf1;
     --tag-character-border: #bee5eb;
     --tag-character-text: #0c5460;
