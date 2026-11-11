@@ -4,6 +4,43 @@ The WinForms-style design system shared by **DynastyReader**, **Lyric-Sync**, **
 
 One set of tokens and themes, one cascade-layer order, and one class vocabulary (`.win-button`, `.group-box`, `.input-field`, `.ds-modal-*` …). Solid components and plain-DOM helpers render the same markup on top of it, and a pro layer adds the DAW/NLE editor chrome.
 
+![SoulWindow showcase in the dark theme: buttons, inputs, settings rows, list items, banners, stat cards and tag pills](docs/images/hero.png)
+
+## What it looks like
+
+### Three themes
+
+Light, dark and high contrast. Themes only change colours; every component reads tokens, so nothing needs per-theme CSS.
+
+![The same buttons, inputs and settings rows in the light, dark and high-contrast themes](docs/images/themes.png)
+
+### Any accent colour
+
+One colour (a preset or any hex) drives primary buttons, selection, toggles, focus rings and links, and is adjusted per theme so it stays readable.
+
+![Buttons and inputs with pink, green, amber and purple accents, in light and dark](docs/images/accents.png)
+
+### Editor layer (DAW / NLE)
+
+`css/pro/daw.css` adds the editor chrome Lyric-Sync and probable-video-editor share: menu bar, transport with a VFD readout, docks and tabs, a timeline frame whose canvas colours come from `--tl-*` tokens, and a status bar. It follows the theme and accent like everything else.
+
+![Editor layout in the dark theme: menu bar, transport with seven-segment clock, project dock, program monitor, inspector, timeline and status bar](docs/images/editor-dark.png)
+
+<details>
+<summary>The same editor in the light theme</summary>
+
+![Editor layout in the light theme](docs/images/editor-light.png)
+
+</details>
+
+### Phones
+
+`data-density="touch"` keeps the compact WinForms look but makes row actions 32px touch targets, lets tab rows scroll sideways, stacks settings rows, and turns dialogs into full-screen sheets that respect the safe area.
+
+![The showcase at phone width in light and dark, and a dialog shown as a full-screen sheet](docs/images/mobile.png)
+
+To try it yourself: `npm install && npm run dev` opens the showcase, with switches for theme, density and accent at the top.
+
 ```
 css/          tokens, themes, density, reset, base, components, mobile, utilities   (framework-free)
 css/pro/      daw.css: menu bar, transport, VFD readout, docks, tabs, splitter, timeline frame, status bar
@@ -113,6 +150,7 @@ npm install
 npm run dev              # showcase on localhost
 npm run check            # typecheck + tests (tests include: no hex colours outside tokens/themes)
 npm run build:showcase && npm run screenshots   # PNGs of every theme × density into screenshots/
+npm run build:showcase && npm run readme-images # regenerate the images in docs/images/ for this README
 ```
 
 The migration plan for each app is in [docs/migration.md](docs/migration.md). Rules for coding agents are in [AGENTS.md](AGENTS.md).
