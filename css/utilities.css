@@ -11,6 +11,17 @@
   .sw-hidden { display: none !important; }
   .sw-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
   .sw-tabular { font-variant-numeric: tabular-nums; }
+  /* Transparency checkerboard behind images with alpha. Squares: --sw-checker-a/-b, --sw-checker-size. */
+  .sw-checker {
+    background-color: var(--sw-checker-a);
+    background-image: conic-gradient(
+      var(--sw-checker-b) 0 25%,
+      transparent 0 50%,
+      var(--sw-checker-b) 0 75%,
+      transparent 0
+    );
+    background-size: calc(2 * var(--sw-checker-size)) calc(2 * var(--sw-checker-size));
+  }
   .sw-sr-only {
     position: absolute;
     width: 1px;

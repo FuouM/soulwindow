@@ -131,6 +131,8 @@
     --sw-ghost-hover-border: rgba(255, 255, 255, 0.32);
     --sw-ghost-active-bg: rgba(255, 255, 255, 0.25);
     --sw-ghost-active-border: rgba(255, 255, 255, 0.45);
+    --sw-checker-a: #2b2b2b;
+    --sw-checker-b: #3c3c3c;
     /* pro: timeline */
     --tl-bg: #16181d;
     --tl-lane-alt: #1a1d23;

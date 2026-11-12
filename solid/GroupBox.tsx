@@ -29,8 +29,7 @@ export function GroupBox(props: GroupBoxProps) {
   return (
     <div
       id={props.id}
-      class={`group-box${props.class ? ` ${props.class}` : ""}`}
-      classList={{ collapsed: !!(props.collapsible && props.collapsed), "group-box--has-actions": !!props.actions }}
+      class={`group-box${props.collapsible && props.collapsed ? " collapsed" : ""}${props.actions ? " group-box--has-actions" : ""}${props.class ? ` ${props.class}` : ""}`}
       style={actionsWidth() > 0 ? { "--ds-group-actions-w": `${actionsWidth() + 12}px` } : undefined}
     >
       <div

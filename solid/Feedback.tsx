@@ -1,4 +1,4 @@
-/** Loading, empty, error and banner states. */
+/** Loading, empty, error, banner, progress and drop-target states. */
 import { createEffect, createSignal, onCleanup, Show, type Accessor, type JSX } from "solid-js";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
@@ -82,6 +82,65 @@ export function Banner(props: BannerProps) {
       <Show when={props.actions}>
         <span class="ds-banner-actions">{props.actions}</span>
       </Show>
+    </div>
+  );
+}
+
+export interface ProgressBarProps {
+  /** Fraction done, 0..1 (clamped). Leave undefined for an indeterminate (busy) bar. */
+  value?: number;
+  /** Red fill: the job failed. */
+  error?: boolean;
+  /** A 3px line without a border, e.g. under a download row. */
+  thin?: boolean;
+  "aria-label"?: string;
+  class?: string;
+  style?: string | JSX.CSSProperties;
+}
+
+/** A `.ds-progress-track` with a `.ds-progress-fill`; the fill slides back and forth while `value` is undefined. */
+export function ProgressBar(props: ProgressBarProps) {
+  const pct = () => (props.value === undefined ? undefined : Math.min(100, Math.max(0, props.value * 100)));
+  const cls = () =>
+    "ds-progress-track" +
+    (pct() === undefined ? " ds-progress-track--indeterminate" : "") +
+    (props.thin ? " ds-progress-track--thin" : "") +
+    (props.error ? " ds-progress-track--error" : "") +
+    (props.class ? ` ${props.class}` : "");
+  return (
+    <div
+      class={cls()}
+      style={props.style}
+      role="progressbar"
+      aria-label={props["aria-label"]}
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow={pct() === undefined ? undefined : Math.round(pct()!)}
+    >
+      <div class="ds-progress-fill" style={pct() === undefined ? undefined : `width: ${pct()}%`} />
+    </div>
+  );
+}
+
+export interface DropZoneProps {
+  /** Bootstrap Icons name without `bi-`. Default "image". */
+  icon?: string;
+  /** Files are being dragged over it (`.ds-drop-active`). To light up the whole container instead,
+   * put `ds-drop-active` on the container; see `isPointOver` in `soulwindow/runtime` for the hit test. */
+  active?: boolean;
+  class?: string;
+  style?: string | JSX.CSSProperties;
+  children?: JSX.Element;
+}
+
+/** A dashed file drop target: icon box and a line of text ("Drop an image here"). */
+export function DropZone(props: DropZoneProps) {
+  return (
+    <div class={`ds-drop-zone${props.active ? " ds-drop-active" : ""}${props.class ? ` ${props.class}` : ""}`} style={props.style}>
+      <div class="ds-drop-icon">
+        <Icon name={props.icon ?? "image"} />
+      </div>
+      <span>{props.children}</span>
     </div>
   );
 }

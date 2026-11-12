@@ -129,6 +129,8 @@
     --sw-ghost-hover-border: #ffffff;
     --sw-ghost-active-bg: #cccccc;
     --sw-ghost-active-border: #ffffff;
+    --sw-checker-a: #000000;
+    --sw-checker-b: #3a3a3a;
     /* pro: timeline (the dark set with stronger edges) */
     --tl-bg: #000000;
     --tl-lane-alt: #0a0a0a;

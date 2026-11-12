@@ -44,8 +44,8 @@ To try it yourself: `npm install && npm run dev` opens the showcase, with switch
 ```
 css/          tokens, themes, density, reset, base, components, mobile, utilities   (framework-free)
 css/pro/      daw.css: menu bar, transport, VFD readout, docks, tabs, splitter, timeline frame, status bar
-runtime/      theme / accent / density controller, pre-paint boot script, Vite plugin, readTokens(), seg7
-solid/        Solid components: Button, GroupBox, InputField, SubTabs, Modal, ListItem, SettingsRow, Feedback …
+runtime/      theme / accent / density controller, pre-paint boot script, Vite plugin, readTokens(), seg7, isPointOver() (drag-drop hit test)
+solid/        Solid components: Button, GroupBox, InputField, SubTabs, Modal, ListItem, SettingsRow, Feedback (Loading, Banner, ProgressBar, DropZone …)
 solid/pro/    MenuBar, LcdDigits
 vanilla/      DOM factories with the same markup, for apps without a framework
 showcase/     every component in every theme and density (npm run dev)
@@ -54,7 +54,7 @@ showcase/     every component in every theme and density (npm run dev)
 ## Use it
 
 ```sh
-npm install github:FuouM/soulwindow#v0.2.2     # or: bun add github:FuouM/soulwindow#v0.2.2
+npm install github:FuouM/soulwindow#v0.3.0     # or: bun add github:FuouM/soulwindow#v0.3.0
 ```
 
 Installing from git runs `prepare`, which builds `dist/` (the Solid components). CSS, `runtime/` and `vanilla/` are plain files and need no build.
@@ -129,7 +129,7 @@ plus its own `:root[data-theme="windows7"] { … }` tokens and chrome CSS in `@l
 | Prefix | What | Notes |
 |---|---|---|
 | `--sys-*` | system colours | The public colour API. Use these. |
-| `--sw-*` | density sizes, component tokens, generic status (`--sw-ok/warn/err`) | New in SoulWindow. |
+| `--sw-*` | density sizes (`--sw-progress-h`, `--sw-checker-size` …), component tokens (`--sw-checker-a/b` …), generic status (`--sw-ok/warn/err`) | New in SoulWindow. |
 | `--space-*`, `--font-*`, `--radius-*`, `--z-*` | scales | `--z-*` is the only allowed source of global z-index. |
 | `--ds-*` | status / danger colours | DynastyReader's names, kept for compatibility. Do not add more. |
 | `--tag-*` | tag taxonomy for `.tag-pill` | |

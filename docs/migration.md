@@ -34,6 +34,7 @@ Found while doing it (DR branch `feat/soulwindow`):
 - DR's `Icon` ignored string `style`s (only objects were spread), so `style="font-size:28px"` on icons and `EmptyState iconCssText` never applied; delete them rather than converting, or the icons change size.
 - SoulWindow grew what DR used: `Button textClass`, `ds-modal-close` as a self-sized class, `Icon spin` / `onClick` (+ `.ds-spin`), `InputField wrapperStyle`, `ListItem fillStyle`, `EmptyState style`, the collapse button's tooltip, and reactive `setLabels()`.
 - Until the release is tagged, DR depends on `"soulwindow": "file:../soulwindow"`; switch to `github:FuouM/soulwindow#<tag>` before merging (CI has no sibling checkout).
+- Since v0.3.0 SoulWindow ships DR's progress bar (`.ds-progress-col`, `.ds-progress-header`, `.ds-progress-pct`, `.ds-progress-track`, `.ds-progress-fill`; height from `--sw-progress-h`). Delete the copy in `styles/utilities.css`. The 3px track in `browse.css` becomes `.ds-progress-track--thin`, and the failed fill (`ds-progress-fill fail` in `SeriesDownloadCard.tsx`, which had no CSS) becomes `.ds-progress-track--error` on the track. `<ProgressBar value={pct / 100} thin error={isFail()} />` renders the same markup with `role="progressbar"`.
 
 ## 2. Lyric-Sync
 
@@ -58,6 +59,7 @@ Found while doing it (DR branch `feat/soulwindow`):
 3. `components/button.ts`, `group-box.ts`, `input-field.ts` → `soulwindow/vanilla`. They already emit the same class names.
 4. Hard-coded light colours in `tags.css`, `gallery.css` (e.g. `.tag-pill-overflow { background: #f0f0f0 }`) → tokens.
 5. `plugins/dynasty-scans`: delete its style fork and import `soulwindow/css` plus DynastyReader's view CSS; longer term, share DR's view components instead of a second copy.
+6. Since v0.3.0 SoulWindow ships the toolbox drag-and-drop styling: `.toolbox-drop-zone` → `.ds-drop-zone`, `.toolbox-drop-icon` → `.ds-drop-icon`, `.toolbox-drop-active` → `.ds-drop-active` (on the source group, or on the zone itself). The `rgba(0, 120, 215, …)` tints are now `color-mix` with `--sys-border-focus`, so they follow the accent, and the `!important` on the border is gone (components sit above `.group-box` in the layer order). Keep `margin-top` in `@layer app`. `ToolboxView`'s `isOverSourceGroup` is `isPointOver(sourceGroup, drop.position)` from `soulwindow/runtime`; the `onDragDropEvent` wiring stays in the app. Markup: `<DropZone>Drop an image here</DropZone>` (Solid) or `dropZone({ text })` (vanilla). The indeterminate bar (`.progress-indeterminate`, `@keyframes progress-slide`, 40% bar) is `.ds-progress-track--indeterminate` (or `<ProgressBar />` without a value).
 
 ## After all four
 

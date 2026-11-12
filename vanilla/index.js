@@ -156,3 +156,44 @@ export function loading(message, inline) {
   d.appendChild(t);
   return d;
 }
+
+/** A `.ds-progress-track`. value: 0..1, or undefined for indeterminate. Call `.set(value)` on the result to update it. */
+export function progressBar(opts) {
+  opts = opts || {};
+  var cls = "ds-progress-track" + (opts.thin ? " ds-progress-track--thin" : "") + (opts.error ? " ds-progress-track--error" : "") + (opts.class ? " " + opts.class : "");
+  var d = el("div", cls, { role: "progressbar", "aria-label": opts.ariaLabel, "aria-valuemin": "0", "aria-valuemax": "100" });
+  var fill = el("div", "ds-progress-fill");
+  d.appendChild(fill);
+  var set = function (value) {
+    var busy = value == null;
+    d.classList.toggle("ds-progress-track--indeterminate", busy);
+    if (busy) {
+      d.removeAttribute("aria-valuenow");
+      fill.style.removeProperty("width");
+    } else {
+      var pct = Math.min(100, Math.max(0, value * 100));
+      d.setAttribute("aria-valuenow", String(Math.round(pct)));
+      fill.style.width = pct + "%";
+    }
+  };
+  set(opts.value);
+  d.set = set;
+  return d;
+}
+
+/** A `.ds-drop-zone` (icon defaults to "image"). Call `.setActive(on)` on the result while files are dragged over it. */
+export function dropZone(opts) {
+  opts = opts || {};
+  var d = el("div", "ds-drop-zone" + (opts.class ? " " + opts.class : ""));
+  var box = el("div", "ds-drop-icon");
+  box.appendChild(icon(opts.icon || "image"));
+  d.appendChild(box);
+  var t = el("span");
+  append(t, opts.text);
+  d.appendChild(t);
+  d.setActive = function (on) {
+    d.classList.toggle("ds-drop-active", !!on);
+  };
+  d.setActive(opts.active);
+  return d;
+}

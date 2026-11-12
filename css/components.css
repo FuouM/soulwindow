@@ -5,7 +5,10 @@
  *   .ds-modal-*                                 dialog (backdrop, window, header, body, footer)
  *   .ds-item                                    list row (leading, fill, actions, read / followed)
  *   .ds-settings-row                            label + description on the left, control on the right
- *   .ds-empty-state, .ds-error-row, .ds-stat-card, .ds-banner */
+ *   .ds-empty-state, .ds-error-row, .ds-stat-card, .ds-banner
+ *   .ds-progress-col / -header / -pct           label + percentage above a progress track
+ *   .ds-progress-track / .ds-progress-fill      progress bar (thin, error, indeterminate modifiers)
+ *   .ds-drop-zone / .ds-drop-icon, .ds-drop-active   file drop target; drag-over state on it or on its container */
 @layer components {
   /* ── Segmented switch ───────────────────────────────────── */
   .ds-segmented-switch {
@@ -493,5 +496,123 @@
   }
   .ds-stat-card--neutral .ds-stat-val {
     color: var(--sys-text-secondary);
+  }
+
+  /* ── Progress bar (from DynastyReader; indeterminate from Project-Curator) ── */
+  .ds-progress-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ds-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-xs);
+  }
+  .ds-progress-pct {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .ds-progress-track {
+    position: relative;
+    width: 100%;
+    height: var(--sw-progress-h);
+    background: var(--sys-border-light);
+    border: 1px solid var(--sys-border-medium);
+    border-radius: var(--radius-1);
+    overflow: hidden;
+  }
+  .ds-progress-fill {
+    height: 100%;
+    max-width: 100%;
+    background: var(--sys-primary);
+    transition: width 0.2s ease;
+  }
+  /* A 3px line under a row (download cards). */
+  .ds-progress-track--thin {
+    height: 3px;
+    border: none;
+  }
+  .ds-progress-track--error .ds-progress-fill {
+    background: var(--sw-err);
+  }
+  .ds-progress-track--indeterminate .ds-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    transition: none;
+    animation: ds-progress-slide 1.5s ease-in-out infinite;
+  }
+  @keyframes ds-progress-slide {
+    0% {
+      left: -40%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ds-progress-fill {
+      transition: none;
+    }
+    /* No sliding: a full, half-strength bar still says "busy". */
+    .ds-progress-track--indeterminate .ds-progress-fill {
+      width: 100%;
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+
+  /* ── Drop zone (from Project-Curator's toolbox) ─────────── */
+  .ds-drop-zone {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px;
+    border: 1px dashed var(--sys-border-dark);
+    border-radius: var(--radius-2);
+    background: var(--sys-window-bg);
+    user-select: none;
+  }
+  .ds-drop-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--sys-border-dark);
+    border-radius: var(--radius-2);
+    background: var(--sys-control-bg);
+  }
+  .ds-drop-icon > i {
+    font-size: 26px;
+    color: var(--sys-text-muted);
+  }
+  .ds-drop-zone > span {
+    font-size: var(--font-md);
+    color: var(--sys-text-muted);
+    text-align: center;
+  }
+  /* Files are being dragged over it: on the zone itself or on the container that receives the drop
+   * (a .group-box). Later layer than .group-box, so it wins without !important. */
+  .ds-drop-active {
+    border: 1px dashed var(--sys-border-focus);
+    background-color: color-mix(in srgb, var(--sys-border-focus) 8%, transparent);
+  }
+  .ds-drop-active .ds-drop-zone {
+    border-color: var(--sys-border-focus);
+    background: color-mix(in srgb, var(--sys-border-focus) 6%, transparent);
+  }
+  .ds-drop-active .ds-drop-icon {
+    border-color: var(--sys-border-focus);
+    background: color-mix(in srgb, var(--sys-border-focus) 12%, transparent);
+  }
+  .ds-drop-active .ds-drop-icon > i {
+    color: var(--sys-border-focus);
   }
 }
