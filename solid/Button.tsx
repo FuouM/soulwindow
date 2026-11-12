@@ -278,6 +278,11 @@ export interface SelectProps<T extends string = string> {
   "aria-label"?: string;
 }
 
+/**
+ * Native `<select>`. Each option also carries `selected`, so the value sticks when the options
+ * arrive or change after `value` was set (async lists); `value` alone is applied once, before the
+ * matching option exists, and the browser then shows the first option.
+ */
 export function Select<T extends string = string>(props: SelectProps<T>) {
   return (
     <select
@@ -290,7 +295,13 @@ export function Select<T extends string = string>(props: SelectProps<T>) {
       aria-label={props["aria-label"]}
       onChange={(ev) => props.onChange?.(ev.currentTarget.value as T)}
     >
-      <For each={props.options}>{(o) => <option value={o.value}>{o.label}</option>}</For>
+      <For each={props.options}>
+        {(o) => (
+          <option value={o.value} selected={o.value === props.value}>
+            {o.label}
+          </option>
+        )}
+      </For>
     </select>
   );
 }

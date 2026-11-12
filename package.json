@@ -1,6 +1,6 @@
 {
   "name": "soulwindow",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "SoulWindow: the WinForms-style design system shared by DynastyReader, Lyric-Sync, probable-video-editor and Project-Curator.",
   "license": "MIT",
   "type": "module",
