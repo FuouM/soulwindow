@@ -599,13 +599,18 @@
     text-align: center;
   }
   /* Files are being dragged over it: on the zone itself or on the container that receives the drop
-   * (a .group-box). Later layer than .group-box, so it wins without !important. */
+   * (a .group-box, an editor area). The dashed edge is an inset outline, not a border, so containers
+   * without a border of their own do not grow or shift; on a bordered box it covers the border. */
   .ds-drop-active {
-    border: 1px dashed var(--sys-border-focus);
+    outline: 1px dashed var(--sys-border-focus);
+    outline-offset: -1px;
     background-color: color-mix(in srgb, var(--sys-border-focus) 8%, transparent);
   }
+  .ds-drop-zone.ds-drop-active,
   .ds-drop-active .ds-drop-zone {
     border-color: var(--sys-border-focus);
+  }
+  .ds-drop-active .ds-drop-zone {
     background: color-mix(in srgb, var(--sys-border-focus) 6%, transparent);
   }
   .ds-drop-active .ds-drop-icon {
