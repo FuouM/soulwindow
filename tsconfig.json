@@ -14,5 +14,5 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": []
   },
-  "include": ["solid", "runtime", "vanilla", "showcase/src"]
+  "include": ["solid", "runtime", "vanilla", "showcase/src", "test/*.typecheck.ts"]
 }
