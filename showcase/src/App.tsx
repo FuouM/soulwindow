@@ -6,6 +6,7 @@ import {
   Banner,
   Button,
   ConfirmDeleteButton,
+  DropZone,
   EmptyState,
   ErrorRetryRow,
   GroupBox,
@@ -15,6 +16,7 @@ import {
   ListItem,
   Loading,
   Modal,
+  ProgressBar,
   SegmentedSwitch,
   Select,
   SettingsRow,
@@ -230,7 +232,14 @@ function VanillaDemo() {
       v.toggle({ checked: true, label: "Enabled" }),
       v.segmented({ value: "grid", options: [{ value: "grid", icon: "grid" }, { value: "list", icon: "list" }], ariaLabel: "Layout" }),
     );
-    box.body.append(row, v.banner({ text: "Same markup as the Solid components.", tone: "ok", icon: "check-circle" }));
+    const drop = v.dropZone({ text: "Drop files here", icon: "file-earmark-arrow-down", active: true });
+    box.body.append(
+      row,
+      v.banner({ text: "Same markup as the Solid components.", tone: "ok", icon: "check-circle" }),
+      v.progressBar({ value: 0.7, ariaLabel: "Vanilla progress" }),
+      v.progressBar({ ariaLabel: "Vanilla busy" }),
+      drop,
+    );
     host.append(box.root);
   });
   return <div ref={host} />;
@@ -244,6 +253,7 @@ export function App(props: { sw: SoulWindow }): JSX.Element {
   const [collapsed, setCollapsed] = createSignal(false);
   const [modal, setModal] = createSignal(false);
   const [query, setQuery] = createSignal("");
+  const [dropping, setDropping] = createSignal(false);
   const tick = () => `${s.theme()}|${s.accent()}|${s.density()}`.length + Math.random();
 
   return (
@@ -409,6 +419,27 @@ export function App(props: { sw: SoulWindow }): JSX.Element {
             </Banner>
             <ErrorRetryRow message="The server did not answer." onRetry={() => {}} />
             <Loading inline message="Downloading model" />
+          </GroupBox>
+
+          <GroupBox
+            class={dropping() ? "ds-drop-active" : undefined}
+            title={<IconText icon={<Icon name="image" />}>Media</IconText>}
+            actions={<Button size="xs" active={dropping()} text="Simulate drag" onClick={() => setDropping(!dropping())} />}
+          >
+            <div class="sc-media sw-checker">
+              <div class="sc-media-shape" />
+            </div>
+            <div class="ds-progress-col">
+              <div class="ds-progress-header">
+                <span>Exporting matte</span>
+                <span class="ds-progress-pct">42%</span>
+              </div>
+              <ProgressBar value={0.42} aria-label="Export progress" />
+            </div>
+            <ProgressBar aria-label="Loading model" />
+            <ProgressBar thin value={0.7} aria-label="Download progress" />
+            <ProgressBar thin error value={0.35} aria-label="Failed download" />
+            <DropZone>Drop an image here</DropZone>
           </GroupBox>
 
           <GroupBox title={<IconText icon={<Icon name="bar-chart" />}>Stats, tags, dialogs</IconText>}>

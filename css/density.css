@@ -17,6 +17,8 @@
     --sw-tab-h: 24px;
     --sw-statusbar-h: 22px;
     --sw-row-pad: 3px 6px;
+    --sw-progress-h: 8px;
+    --sw-checker-size: 6px;
   }
 
   /* Touch keeps the 24px toolbar chrome DynastyReader uses on phones, and enlarges what a thumb
@@ -28,5 +30,6 @@
     --sw-header-h: 32px;
     --sw-menu-item-h: 32px;
     --sw-row-pad: 8px 8px;
+    --sw-progress-h: 12px;
   }
 }

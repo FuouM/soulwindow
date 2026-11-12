@@ -101,4 +101,18 @@
     background: linear-gradient(135deg, var(--sys-button-hover), var(--sys-primary));
     border: 1px solid var(--sys-border-dark);
   }
+  /* An image with alpha on the checkerboard. */
+  .sc-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 140px;
+    border: 1px solid var(--sys-border-dark);
+  }
+  .sc-media-shape {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--sys-primary) 30%, transparent 70%);
+  }
 }

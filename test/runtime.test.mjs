@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { createColorKit } from "../runtime/color-kit.js";
 import { bootScript } from "../runtime/boot.js";
 import { seg7Html } from "../runtime/seg7.js";
+import { isPointOver } from "../runtime/drop.js";
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
@@ -44,6 +45,23 @@ test("seg7Html draws digits and escapes text", () => {
   assert.match(html, /daw-seg7-narrow/);
   assert.match(html, /&lt;/);
   assert.equal((html.match(/<polygon/g) ?? []).length, 7);
+});
+
+test("isPointOver hit-tests physical or CSS pixels against an element and its children", () => {
+  const child = {};
+  const el = { contains: (n) => n === child };
+  const calls = [];
+  globalThis.window = { devicePixelRatio: 2 };
+  globalThis.document = { elementFromPoint: (x, y) => (calls.push([x, y]), x < 50 ? child : {}) };
+  try {
+    assert.equal(isPointOver(el, { x: 80, y: 40 }), true);
+    assert.deepEqual(calls[0], [40, 20]);
+    assert.equal(isPointOver(el, { x: 80, y: 40 }, false), false);
+    assert.equal(isPointOver(el, undefined), false);
+  } finally {
+    delete globalThis.window;
+    delete globalThis.document;
+  }
 });
 
 test("CSS has no hex colours outside the token and theme files", () => {

@@ -55,6 +55,8 @@
     --sw-statusbar-h: 22px;
     --sw-font-base: var(--font-md);
     --sw-row-pad: 6px 8px;     /* list rows */
+    --sw-progress-h: 10px;     /* .ds-progress-track */
+    --sw-checker-size: 8px;    /* one square of .sw-checker */
 
     /* ── colours: light ─────────────────────────────────────── */
     --sys-accent: #0078d4; /* the raw accent; the runtime overrides it with the chosen colour */
@@ -194,6 +196,8 @@
     --sw-count-active-bg: rgba(255, 255, 255, 0.22);
     --sw-focus-ring: var(--sys-border-focus);
     --sw-disabled-opacity: 0.45;
+    --sw-checker-a: #ffffff;   /* .sw-checker: transparency checkerboard squares */
+    --sw-checker-b: #d6d6d6;
 
     /* ── pro: timeline canvas (read with readTokens("--tl-")) ── */
     --tl-bg: #ffffff;

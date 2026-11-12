@@ -35,3 +35,9 @@ export function segmented<T extends string>(opts: {
 }): HTMLDivElement & { set(value: T): void };
 export function banner(opts: { text: string | Node; tone?: "info" | "ok" | "warn" | "error"; icon?: string; actions?: HTMLElement[] }): HTMLDivElement;
 export function loading(message?: string, inline?: boolean): HTMLDivElement;
+export function progressBar(opts?: { value?: number; thin?: boolean; error?: boolean; ariaLabel?: string; class?: string }): HTMLDivElement & {
+  set(value?: number): void;
+};
+export function dropZone(opts?: { text?: string | Node; icon?: string; active?: boolean; class?: string }): HTMLDivElement & {
+  setActive(on: boolean): void;
+};
