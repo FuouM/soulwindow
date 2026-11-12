@@ -11,6 +11,7 @@ export interface InputFieldProps {
   placeholder?: string;
   class?: string;
   wrapperClass?: string;
+  wrapperStyle?: string | JSX.CSSProperties;
   style?: string | JSX.CSSProperties;
   title?: string;
   autocomplete?: string;
@@ -51,6 +52,7 @@ export function InputField(props: InputFieldProps) {
     <div
       class={`input-wrapper${props.wrapperClass ? ` ${props.wrapperClass}` : ""}`}
       classList={{ "has-value": !props.noClear && !props.disabled && value().length > 0 }}
+      style={props.wrapperStyle}
     >
       <input
         ref={(el) => {

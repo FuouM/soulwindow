@@ -8,10 +8,18 @@
     font-size: var(--sw-font-base);
   }
 
+  /* The boot script paints <html> inline before this stylesheet loads, then the runtime removes
+   * that paint; from then on the theme tokens colour the root (window edges, overscroll). */
+  html {
+    height: 100%;
+    background-color: var(--sys-control-bg);
+    color: var(--sys-control-text);
+  }
+
   body {
     background-color: var(--sys-control-bg);
     color: var(--sys-control-text);
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;

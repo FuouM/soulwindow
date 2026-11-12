@@ -40,9 +40,9 @@ export function Loading(props: LoadingProps) {
   );
 }
 
-export function EmptyState(props: { icon?: string; children?: JSX.Element }) {
+export function EmptyState(props: { icon?: string; style?: string | JSX.CSSProperties; children?: JSX.Element }) {
   return (
-    <div class="ds-empty-state">
+    <div class="ds-empty-state" style={props.style}>
       <Show when={props.icon}>
         <Icon name={props.icon!} />
       </Show>
@@ -52,9 +52,9 @@ export function EmptyState(props: { icon?: string; children?: JSX.Element }) {
 }
 
 /** A failure and the way forward. */
-export function ErrorRetryRow(props: { message: JSX.Element; onRetry: () => void; retryText?: string }) {
+export function ErrorRetryRow(props: { message: JSX.Element; onRetry: () => void; retryText?: string; class?: string }) {
   return (
-    <div class="ds-error-row" role="alert">
+    <div class={`ds-error-row${props.class ? ` ${props.class}` : ""}`} role="alert">
       <span class="ds-muted">{props.message}</span>
       <Button icon={<Icon name="arrow-clockwise" />} text={props.retryText ?? label("retry")} onClick={props.onRetry} />
     </div>

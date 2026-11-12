@@ -21,8 +21,19 @@ Order: safest first. Each step is its own PR in that app's repo, pinned to a Sou
 4. Rename the `reader` layer to `app` in DR's CSS (`@layer reader` → `@layer app`) and drop DR's own `@layer …` order statements (SoulWindow declares the order).
 5. Move the reader-only tokens that SoulWindow dropped into an `app`-layer block in DR: `--ds-reader-*`, `--sys-reader-viewport-bg`, `--ds-followed-corner*` (per theme).
 6. Set density from the platform: `sw.setDensity(isMobile() ? "touch" : "comfortable")`. Then delete the `#ds-root[data-mobile] … .win-button { width: 24px !important … }` blocks one by one, checking screenshots: most are already what the density tokens give.
-7. Replace `components/Button|GroupBox|InputField|SubTabs|Modal|ListItem|SettingsRow|Feedback.tsx` with re-exports from `soulwindow/solid` (prop renames: `className`→`class`, `cssText`→`style`, `DsSwitch`→`Switch`, `DsSelect`→`Select`, `Loading` takes no random message (pass `getRandomLoadingMessage()`), `EmptyState iconName`→`icon`). Call `setLabels({ close: t("common.close"), … })` when the language changes. DR-only buttons (`AddToCollectionButton`, `ExternalLinkButton`, `BlacklistModeSwitch` …) stay in DR, built on SoulWindow's `Button`.
+7. Delete `components/Button|GroupBox|InputField|SubTabs|Modal|ListItem|SettingsRow|Feedback|Icon.tsx` and import from `soulwindow/solid` (prop renames: `className`→`class`, `cssText`→`style`, `DsSwitch`→`Switch`, `DsSelect`→`Select` (options as an `options` array), `ariaLabel`→`aria-label`, `Loading` takes no random message (pass `getRandomLoadingMessage()`), `EmptyState iconName`→`icon`, `ListItem fillCssText`→`fillStyle` plus `followedTitle`, `Modal backdropId`→`id` and `body`→children). Call `setLabels({ close: t("common.close"), … })` in an effect so it follows the language. DR-only buttons (`AddToCollectionButton`, `ExternalLinkButton`, `BlacklistModeSwitch` …) and the named icon shortcuts (`SearchIcon` …) stay in DR, built on SoulWindow's `Button` / `Icon`.
 8. Compare screenshots of every view in every theme, desktop and Android, before and after (DR already has puppeteer).
+
+Found while doing it (DR branch `feat/soulwindow`):
+
+- Renaming only `reader` → `app` is not enough. DR's view CSS lived in `layout` and `components`, which sit *below* SoulWindow's `components` layer, so SoulWindow's copies of the same rules (modal body padding, settings-row description, segmented switch …) silently won. All app CSS has to sit in `app`; DR keeps its old tiers as sub-layers, declared once: `@layer app.layout, app.components, app.reader;`.
+- DR's dark-theme view overrides were written `:is(:root[data-theme="dark"], body.ds-dark)`, and the old theme store put `ds-dark` on `<body>` for high contrast too. Dropping `legacyClassPrefix` therefore needs those overrides scoped to `:root:is([data-theme="dark"], [data-theme="high-contrast"])`.
+- The old inline `<style>` in `index.html` coloured `<html>` per theme. SoulWindow's `reset.css` now paints `html` from `--sys-control-bg` / `--sys-control-text`, so nothing is lost when the runtime removes the boot script's inline paint.
+- Under Windows 7, page text was the theme's `text` (`--sys-window-text`), not `--sys-control-text` (accent-tinted there); the add-on sets `body { color: var(--sys-window-text) }`.
+- `.ds-subtab .ds-btn-text` has a 4px gap in SoulWindow, so DR's `ds-mr-4` on tab icons and the 5px count margin double up; drop them.
+- DR's `Icon` ignored string `style`s (only objects were spread), so `style="font-size:28px"` on icons and `EmptyState iconCssText` never applied; delete them rather than converting, or the icons change size.
+- SoulWindow grew what DR used: `Button textClass`, `ds-modal-close` as a self-sized class, `Icon spin` / `onClick` (+ `.ds-spin`), `InputField wrapperStyle`, `ListItem fillStyle`, `EmptyState style`, the collapse button's tooltip, and reactive `setLabels()`.
+- Until the release is tagged, DR depends on `"soulwindow": "file:../soulwindow"`; switch to `github:FuouM/soulwindow#<tag>` before merging (CI has no sibling checkout).
 
 ## 2. Lyric-Sync
 

@@ -7,6 +7,8 @@ import { Show, type JSX } from "solid-js";
 export interface ListItemProps {
   class?: string;
   style?: string | JSX.CSSProperties;
+  /** Style of the `.ds-fill` column. */
+  fillStyle?: string | JSX.CSSProperties;
   leading?: JSX.Element;
   title?: JSX.Element;
   body?: JSX.Element;
@@ -47,7 +49,7 @@ export function ListItem(props: ListItemProps) {
         <div class="ds-item-corner-mark" title={props.followedTitle} />
       </Show>
       {props.leading}
-      <div class="ds-fill">
+      <div class="ds-fill" style={props.fillStyle}>
         {props.title}
         {props.body}
       </div>

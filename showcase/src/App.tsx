@@ -315,6 +315,7 @@ export function App(props: { sw: SoulWindow }): JSX.Element {
               <Button active text="Active" />
               <Button disabled text="Disabled" />
               <Button loading text="Loading" />
+              <Button icon={<Icon name="arrow-clockwise" spin />} text="Checking" />
             </div>
             <div class="sc-row">
               <Button size="sm" text="Small" />

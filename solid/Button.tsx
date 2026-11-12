@@ -33,6 +33,8 @@ export interface ButtonProps {
   disabled?: boolean;
   icon?: JSX.Element;
   text?: JSX.Element;
+  /** Class of the text span (default `ds-btn-text`). */
+  textClass?: string;
   /** Put the icon after the text. */
   reverse?: boolean;
   onClick?: (ev: MouseEvent) => void;
@@ -40,7 +42,8 @@ export interface ButtonProps {
   children?: JSX.Element;
 }
 
-const SIZE_CLASS = /(?:^|\s)ds-(?:btn-(?:compact|sm|xs|icon|icon-sm)|segmented-btn|subtab)(?:$|\s)/;
+// Classes that bring their own size, so no ds-btn-* default is added.
+const SIZE_CLASS = /(?:^|\s)ds-(?:btn-(?:compact|sm|xs|icon|icon-sm)|segmented-btn|subtab|modal-close)(?:$|\s)/;
 
 export function Button(props: ButtonProps) {
   const hasText = () => (props.text !== undefined && props.text !== "") || props.children !== undefined;
@@ -61,7 +64,7 @@ export function Button(props: ButtonProps) {
     ) : props.icon ? (
       <span class="ds-btn-icon-wrap">{props.icon}</span>
     ) : null;
-  const text = () => (hasText() ? <span class="ds-btn-text">{props.text ?? props.children}</span> : null);
+  const text = () => (hasText() ? <span class={props.textClass ?? "ds-btn-text"}>{props.text ?? props.children}</span> : null);
 
   return (
     <button
@@ -160,6 +163,7 @@ export function ConfirmDeleteButton(props: ConfirmDeleteButtonProps) {
       loading={busy()}
       icon={armed() ? <Icon name="check-lg" /> : props.icon}
       text={armed() ? (iconOnly() ? undefined : (props.confirmText ?? `${label("delete")}?`)) : (props.text ?? props.children)}
+      textClass={props.textClass}
       onClick={click}
     />
   );
