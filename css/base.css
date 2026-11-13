@@ -128,6 +128,14 @@
     border-color: var(--ds-danger-btn-active);
   }
 
+  /* Disabled wins over the coloured variants, whose rules above match with equal or higher
+   * specificity (and on hover). A loading button keeps its colour: it is the running action. */
+  .win-button:is(.primary, .ds-btn-danger):is(:disabled, [aria-disabled="true"]):not(.ds-btn-loading) {
+    background-color: var(--sys-button-disabled-bg);
+    color: var(--sys-button-disabled-text);
+    border-color: var(--sys-button-disabled-border);
+  }
+
   .ds-btn-spinner {
     width: 12px;
     height: 12px;
