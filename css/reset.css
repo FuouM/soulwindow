@@ -4,8 +4,21 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+  }
+
+  /* The UI font is set once on <html> and inherited: a component that sets its own font
+   * (a chip, a group-box title, a readout) passes it to its children. Form controls do not
+   * inherit fonts by default, so they are told to. */
+  html {
     font-family: var(--sw-font-ui);
     font-size: var(--sw-font-base);
+  }
+  button,
+  input,
+  select,
+  textarea,
+  optgroup {
+    font: inherit;
   }
 
   /* The boot script paints <html> inline before this stylesheet loads, then the runtime removes
