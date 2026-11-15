@@ -26,7 +26,7 @@ import {
   Switch,
   useSoulWindow,
 } from "../../solid";
-import { LcdDigits, MenuBar } from "../../solid/pro";
+import { LcdDigits, MenuBar, SeekBar } from "../../solid/pro";
 
 const TOKEN_GROUPS: [string, string[]][] = [
   ["Surfaces", ["--sys-control-bg", "--sys-window-bg", "--sys-card-bg", "--sys-menu-bg", "--sys-status-bg", "--sys-hover-bg", "--sys-bg-active"]],
@@ -112,6 +112,7 @@ function Timeline(props: { tick: number }) {
 function Daw(props: { tick: number }) {
   const [playing, setPlaying] = createSignal(false);
   const [loop, setLoop] = createSignal(true);
+  const [frame, setFrame] = createSignal(40);
   return (
     <div class="daw-app sc-daw" data-density="compact">
       <MenuBar
@@ -135,8 +136,14 @@ function Daw(props: { tick: number }) {
           <button class="daw-tbtn" title="To start">
             <Icon name="skip-start-fill" />
           </button>
+          <button class="daw-tbtn" title="Previous frame (Left)" onClick={() => setFrame(Math.max(0, frame() - 1))}>
+            <Icon name="caret-left-fill" />
+          </button>
           <button class="daw-tbtn daw-tbtn-play" classList={{ "daw-on": playing() }} onClick={() => setPlaying(!playing())} title="Play">
             <Icon name={playing() ? "pause-fill" : "play-fill"} />
+          </button>
+          <button class="daw-tbtn" title="Next frame (Right)" onClick={() => setFrame(Math.min(239, frame() + 1))}>
+            <Icon name="caret-right-fill" />
           </button>
           <button class="daw-tbtn" classList={{ "daw-on": loop() }} onClick={() => setLoop(!loop())} title="Loop">
             <Icon name="repeat" />
@@ -166,6 +173,16 @@ function Daw(props: { tick: number }) {
             <Icon name="magic" /> Solve
           </button>
         </div>
+      </div>
+      <div class="sc-seek">
+        <SeekBar
+          aria-label="Seek"
+          value={frame()}
+          max={239}
+          marks={[{ value: 96, title: "Key frame 96" }]}
+          format={(f) => `Frame ${f} · 0:${String(Math.floor(f / 24)).padStart(2, "0")}`}
+          onInput={setFrame}
+        />
       </div>
       <div class="daw-upper">
         <div class="daw-dock">

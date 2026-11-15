@@ -6,6 +6,7 @@
  *   .daw-app                     full-window column: menubar, transport, upper area, timeline, status bar
  *   .daw-menubar / .daw-menu-*   classic menu bar with drop-down menus
  *   .daw-transport / .daw-tbtn   transport bar and its buttons
+ *   .daw-seek                    seek bar over frames (SeekBar in soulwindow/solid/pro): fill, marks, hover tip
  *   .daw-lcd / .daw-seg7-*       VFD readout with seven-segment digits
  *   .daw-upper / .daw-dock / .daw-center / .daw-panel(-title, -body)
  *   .daw-tabs / .daw-tab         dock tabs
@@ -470,6 +471,61 @@
     display: block;
     touch-action: none;
   }
+
+  /* ── Seek bar (pve-next's player bar): fill to the playhead, marks, a hover tip ── */
+  .daw-seek {
+    position: relative;
+    height: 14px;
+    background: var(--sys-window-bg);
+    border: 1px solid var(--sys-border-dark);
+    cursor: pointer;
+    touch-action: none;
+    outline: none;
+  }
+  .daw-seek:hover {
+    border-color: var(--sys-border-focus);
+  }
+  .daw-seek:focus-visible {
+    outline: 1px solid var(--sw-focus-ring);
+    outline-offset: 1px;
+  }
+  .daw-seek[aria-disabled="true"] {
+    opacity: var(--sw-disabled-opacity);
+    cursor: default;
+  }
+  .daw-seek-fill {
+    height: 100%;
+    background: var(--sys-highlight-bg);
+    pointer-events: none;
+  }
+  .daw-seek-mark {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    width: 2px;
+    margin-left: -1px;
+    background: var(--tl-clip-selected);
+    pointer-events: none;
+  }
+  .daw-seek-tip {
+    position: absolute;
+    bottom: 18px;
+    transform: translateX(-50%);
+    padding: 2px 6px;
+    background: var(--sys-menu-bg);
+    border: 1px solid var(--sys-menu-border);
+    color: var(--sys-control-text);
+    font: var(--font-sm) var(--sw-font-mono);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    z-index: var(--z-tooltip);
+  }
+  .daw-seek:hover .daw-seek-tip,
+  .daw-seek.is-dragging .daw-seek-tip {
+    opacity: 1;
+  }
+
   .daw-track-headers {
     position: absolute;
     top: 0;
