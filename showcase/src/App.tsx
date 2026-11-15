@@ -237,6 +237,83 @@ function Daw(props: { tick: number }) {
   );
 }
 
+/** The smaller pro primitives: tone buttons, beat dots, range, a CodeMirror host mock, vanilla seekBar(). */
+function EditorParts() {
+  const [beat, setBeat] = createSignal(0);
+  const timer = setInterval(() => setBeat((b) => (b + 1) % 4), 500);
+  onCleanup(() => clearInterval(timer));
+  let seekHost!: HTMLDivElement;
+  onMount(() => {
+    const label = document.createElement("span");
+    label.className = "ds-mono";
+    const bar = v.seekBar({
+      max: 239,
+      value: 120,
+      marks: [{ value: 48, title: "In" }, { value: 200, title: "Out" }],
+      format: (f) => `Frame ${f}`,
+      onInput: (f) => (label.textContent = `vanilla seekBar(): ${f}`),
+      ariaLabel: "Vanilla seek",
+    });
+    label.textContent = "vanilla seekBar(): 120";
+    seekHost.append(bar, label);
+  });
+  return (
+    <div class="sc-parts" data-density="compact">
+      <div class="sc-row">
+        <button class="win-button ds-btn-compact daw-btn-err">
+          <Icon name="record-circle" /> Render
+        </button>
+        <button class="win-button ds-btn-compact daw-btn-ok">
+          <Icon name="film" /> Encode
+        </button>
+        <button class="win-button ds-btn-compact daw-btn-warn">Re-solve</button>
+        <button class="win-button ds-btn-compact daw-btn-err daw-btn-ghost">
+          <Icon name="trash" /> Remove
+        </button>
+        <button class="win-button ds-btn-compact daw-btn-ghost">Ghost</button>
+        <button class="win-button ds-btn-compact daw-btn-ok" disabled>
+          Disabled
+        </button>
+        <button class="daw-tbtn daw-btn-err" title="Stop render">
+          <Icon name="stop-fill" />
+        </button>
+        <button class="daw-tbtn daw-btn-ok" title="Pinned">
+          <Icon name="pin-angle-fill" />
+        </button>
+      </div>
+      <div class="sc-row">
+        <span class="sc-row" role="img" aria-label="Beat indicator">
+          <For each={[0, 1, 2, 3]}>{(i) => <span class="daw-beat-dot" classList={{ "daw-beat-dot--on": beat() === i, "daw-beat-dot--down": i === 0 }} />}</For>
+        </span>
+        <input class="daw-range sc-range" type="range" min="0" max="100" value="70" aria-label="Volume" />
+        <input class="daw-range sc-range" type="range" min="0" max="100" value="30" aria-label="Gain (disabled)" disabled />
+      </div>
+      <div ref={seekHost} class="sc-seek-vanilla" />
+      <div class="sc-cm">
+        <div class="daw-cm-host">
+          <div class="cm-editor cm-focused">
+            <div class="cm-scroller">
+              <div class="cm-gutters">
+                <div class="cm-gutter cm-lineNumbers">
+                  <For each={[1, 2, 3, 4]}>{(n) => <div class="cm-gutterElement" classList={{ "cm-activeLineGutter": n === 2 }}>{n}</div>}</For>
+                </div>
+              </div>
+              <div class="cm-content">
+                <div class="cm-line">[verse 1]</div>
+                <div class="cm-line cm-activeLine">iwashi ga tsuchi kara</div>
+                <div class="cm-line">haete kurunda</div>
+                <div class="cm-line">
+                  <span class="sc-cm-sel">selected text</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function VanillaDemo() {
   let host!: HTMLDivElement;
   onMount(() => {
@@ -479,6 +556,10 @@ export function App(props: { sw: SoulWindow }): JSX.Element {
 
         <GroupBox title={<IconText icon={<Icon name="soundwave" />}>Pro layer (DAW / NLE), compact density</IconText>}>
           <Daw tick={tick()} />
+        </GroupBox>
+
+        <GroupBox title={<IconText icon={<Icon name="sliders2" />}>Pro parts: tone buttons, beat dots, range, seekBar(), CodeMirror host</IconText>}>
+          <EditorParts />
         </GroupBox>
 
         <div class="sc-grid">

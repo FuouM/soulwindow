@@ -119,4 +119,46 @@
     border-radius: 50%;
     background: radial-gradient(circle, var(--sys-primary) 30%, transparent 70%);
   }
+  .sc-parts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sc-range {
+    width: 100px;
+  }
+  .sc-seek-vanilla {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  /* Static stand-in for CodeMirror's own layout (its base theme normally provides this). */
+  .sc-cm {
+    display: flex;
+    height: 96px;
+    border: 1px solid var(--sys-border-dark);
+  }
+  .sc-cm .cm-scroller {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+  }
+  .sc-cm .cm-gutterElement {
+    padding: 0 6px 0 8px;
+    text-align: right;
+  }
+  .sc-cm .cm-content {
+    flex: 1;
+    padding: 4px 0;
+  }
+  .sc-cm .cm-gutters {
+    padding: 4px 0;
+    align-self: stretch;
+  }
+  .sc-cm .cm-line {
+    padding: 0 6px;
+  }
+  .sc-cm-sel {
+    background: var(--sw-cm-selection);
+  }
 }

@@ -115,6 +115,7 @@
     --sw-warn: #ffdd55;
     --sw-warn-bg: #1a1400;
     --sw-err: #ff6b6b;
+    --sw-err-bg: #1a0000;
     /* components: hard edges, white focus */
     --sw-backdrop: rgba(0, 0, 0, 0.7);
     --sw-modal-shadow: none;
@@ -131,6 +132,8 @@
     --sw-ghost-active-border: #ffffff;
     --sw-checker-a: #000000;
     --sw-checker-b: #3a3a3a;
+    --sw-cm-active-line: rgba(255, 255, 255, 0.1);
+    --sw-cm-selection: rgba(102, 184, 255, 0.45);
     /* pro: timeline (the dark set with stronger edges) */
     --tl-bg: #000000;
     --tl-lane-alt: #0a0a0a;

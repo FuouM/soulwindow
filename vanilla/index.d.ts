@@ -41,3 +41,30 @@ export function progressBar(opts?: { value?: number; thin?: boolean; error?: boo
 export function dropZone(opts?: { text?: string | Node; icon?: string; active?: boolean; class?: string }): HTMLDivElement & {
   setActive(on: boolean): void;
 };
+export interface SeekBarMark {
+  value: number;
+  /** Tooltip of the mark. */
+  title?: string;
+}
+/** `.daw-seek` (pro layer): same markup and behaviour as SeekBar in soulwindow/solid/pro. */
+export function seekBar(opts: {
+  /** Last position (e.g. frame count − 1); 0 makes the bar inert. */
+  max: number;
+  /** Current position, 0..max (default 0). */
+  value?: number;
+  marks?: SeekBarMark[];
+  /** Hover tip text and screen-reader value, e.g. "Frame 40 · 0:01.33". No tip without it. */
+  format?: (value: number) => string;
+  /** Every change while dragging or stepping (the bar has already moved). */
+  onInput: (value: number) => void;
+  onScrubStart?: () => void;
+  onScrubEnd?: () => void;
+  disabled?: boolean;
+  ariaLabel?: string;
+  class?: string;
+}): HTMLDivElement & {
+  set(value: number): void;
+  setMax(max: number): void;
+  setMarks(marks: SeekBarMark[]): void;
+  setDisabled(on: boolean): void;
+};

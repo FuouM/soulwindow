@@ -197,3 +197,132 @@ export function dropZone(opts) {
   d.setActive(opts.active);
   return d;
 }
+
+/** A `.daw-seek` bar (pro layer), the plain-DOM twin of SeekBar in soulwindow/solid/pro: integer positions
+ * 0..max, fill to the value, marks, a hover tip when `format` is given. Drag or click to seek; arrows step
+ * one, Page Up/Down ten, Home/End jump. Returns the root; `.set(value)`, `.setMax(max)`, `.setMarks(marks)`,
+ * `.setDisabled(on)` update it. A seek also moves the bar itself, so `onInput` need not call `.set()`. */
+export function seekBar(opts) {
+  var value = 0, max = 0, marks = [], disabled = !!opts.disabled, hover = null, dragging = false;
+  var d = el("div", "daw-seek" + (opts.class ? " " + opts.class : ""), { role: "slider", "aria-label": opts.ariaLabel, "aria-valuemin": "0" });
+  var fill = el("div", "daw-seek-fill");
+  var tip = el("div", "daw-seek-tip");
+  var markEls = [];
+  d.appendChild(fill);
+
+  var clampValue = function (v) {
+    return Math.min(max, Math.max(0, Math.round(v)));
+  };
+  var pct = function (v) {
+    return max > 0 ? (clampValue(v) / max) * 100 : 0;
+  };
+  var inert = function () {
+    return disabled || max <= 0;
+  };
+  var renderTip = function () {
+    var at = dragging ? value : hover;
+    if (!opts.format || at === null) {
+      if (tip.parentNode) tip.parentNode.removeChild(tip);
+      return;
+    }
+    tip.style.left = Math.min(94, Math.max(6, pct(at))) + "%";
+    tip.textContent = opts.format(at);
+    if (!tip.parentNode) d.appendChild(tip);
+  };
+  var render = function () {
+    var off = inert();
+    d.tabIndex = off ? -1 : 0;
+    d.setAttribute("aria-valuemax", String(max));
+    d.setAttribute("aria-valuenow", String(value));
+    if (opts.format) d.setAttribute("aria-valuetext", opts.format(value));
+    if (off) d.setAttribute("aria-disabled", "true");
+    else d.removeAttribute("aria-disabled");
+    d.classList.toggle("is-dragging", dragging);
+    fill.style.width = pct(value) + "%";
+    for (var i = 0; i < markEls.length; i++) markEls[i].style.left = pct(marks[i].value) + "%";
+    renderTip();
+  };
+  var renderMarks = function () {
+    for (var i = 0; i < markEls.length; i++) d.removeChild(markEls[i]);
+    markEls = [];
+    for (var j = 0; j < marks.length; j++) {
+      var m = el("div", "daw-seek-mark", { title: marks[j].title });
+      d.insertBefore(m, tip.parentNode ? tip : null);
+      markEls.push(m);
+    }
+  };
+  var emit = function (v) {
+    var next = clampValue(v);
+    if (next === value) return;
+    value = next;
+    render();
+    opts.onInput(next);
+  };
+  var at = function (ev) {
+    var r = d.getBoundingClientRect();
+    return clampValue(((ev.clientX - r.left) / Math.max(r.width, 1)) * max);
+  };
+  var end = function (ev) {
+    if (!d.hasPointerCapture(ev.pointerId)) return;
+    d.releasePointerCapture(ev.pointerId);
+    dragging = false;
+    render();
+    if (opts.onScrubEnd) opts.onScrubEnd();
+  };
+
+  d.addEventListener("pointerdown", function (ev) {
+    if (inert() || ev.button !== 0) return;
+    d.setPointerCapture(ev.pointerId);
+    d.focus();
+    dragging = true;
+    render();
+    if (opts.onScrubStart) opts.onScrubStart();
+    emit(at(ev));
+  });
+  d.addEventListener("pointermove", function (ev) {
+    if (inert()) return;
+    var v = at(ev);
+    hover = v;
+    renderTip();
+    if (d.hasPointerCapture(ev.pointerId)) emit(v);
+  });
+  d.addEventListener("pointerleave", function () {
+    hover = null;
+    renderTip();
+  });
+  d.addEventListener("pointerup", end);
+  d.addEventListener("pointercancel", end);
+  d.addEventListener("keydown", function (ev) {
+    if (inert()) return;
+    var step = { ArrowLeft: -1, ArrowRight: 1, ArrowDown: -1, ArrowUp: 1, PageDown: -10, PageUp: 10 }[ev.key];
+    if (step !== undefined) emit(value + step);
+    else if (ev.key === "Home") emit(0);
+    else if (ev.key === "End") emit(max);
+    else return;
+    ev.preventDefault();
+    ev.stopPropagation();
+  });
+
+  d.set = function (v) {
+    value = clampValue(v);
+    render();
+  };
+  d.setMax = function (m) {
+    max = Math.max(0, Math.round(m));
+    value = clampValue(value);
+    render();
+  };
+  d.setMarks = function (list) {
+    marks = list ? list.slice() : [];
+    renderMarks();
+    render();
+  };
+  d.setDisabled = function (on) {
+    disabled = !!on;
+    render();
+  };
+  max = Math.max(0, Math.round(opts.max));
+  value = clampValue(opts.value || 0);
+  d.setMarks(opts.marks);
+  return d;
+}

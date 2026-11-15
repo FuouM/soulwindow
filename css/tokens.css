@@ -177,6 +177,7 @@
     --sw-warn: #b06000;
     --sw-warn-bg: #fff8e1;
     --sw-err: #d13438;
+    --sw-err-bg: #fde7e9;
     --sw-busy: #f0a640;
 
     /* ── component tokens ───────────────────────────────────── */
@@ -198,6 +199,8 @@
     --sw-disabled-opacity: 0.45;
     --sw-checker-a: #ffffff;   /* .sw-checker: transparency checkerboard squares */
     --sw-checker-b: #d6d6d6;
+    --sw-cm-active-line: rgba(0, 0, 0, 0.04);   /* .daw-cm-host: CodeMirror active line, selection */
+    --sw-cm-selection: rgba(0, 120, 215, 0.22);
 
     /* ── pro: timeline canvas (read with readTokens("--tl-")) ── */
     --tl-bg: #ffffff;
