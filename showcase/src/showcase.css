@@ -94,6 +94,10 @@
   .sc-daw .daw-upper {
     min-width: 760px;
   }
+  .sc-daw .sc-seek {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--sys-border-dark);
+  }
   .sc-cover {
     width: 36px;
     height: 48px;
