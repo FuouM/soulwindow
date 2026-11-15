@@ -5,6 +5,7 @@ import { createColorKit } from "../runtime/color-kit.js";
 import { bootScript } from "../runtime/boot.js";
 import { seg7Html } from "../runtime/seg7.js";
 import { isPointOver } from "../runtime/drop.js";
+import { seekBar } from "../vanilla/index.js";
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
@@ -63,6 +64,109 @@ test("isPointOver hit-tests physical or CSS pixels against an element and its ch
     delete globalThis.document;
   }
 });
+
+// Just enough DOM for seekBar(): elements, attributes, classes, listeners, pointer capture.
+class FakeEl {
+  constructor(tag) {
+    Object.assign(this, { tagName: tag, className: "", tabIndex: 0, textContent: "", parentNode: null, children: [], attrs: {}, style: {}, on: {}, captured: new Set() });
+    this.classList = {
+      toggle: (c, force) => {
+        const s = new Set(this.className.split(" ").filter(Boolean));
+        if (force) s.add(c);
+        else s.delete(c);
+        this.className = [...s].join(" ");
+      },
+      contains: (c) => this.className.split(" ").includes(c),
+    };
+  }
+  setAttribute(k, v) { this.attrs[k] = String(v); }
+  removeAttribute(k) { delete this.attrs[k]; }
+  appendChild(c) { return this.insertBefore(c, null); }
+  insertBefore(c, ref) {
+    const i = ref ? this.children.indexOf(ref) : -1;
+    if (i < 0) this.children.push(c);
+    else this.children.splice(i, 0, c);
+    c.parentNode = this;
+    return c;
+  }
+  removeChild(c) { this.children.splice(this.children.indexOf(c), 1); c.parentNode = null; return c; }
+  addEventListener(t, f) { (this.on[t] ??= []).push(f); }
+  fire(t, ev = {}) {
+    const e = { prevented: false, preventDefault() { this.prevented = true; }, stopPropagation() {}, ...ev };
+    for (const f of this.on[t] ?? []) f(e);
+    return e;
+  }
+  focus() {}
+  getBoundingClientRect() { return { left: 0, width: 100 }; }
+  setPointerCapture(id) { this.captured.add(id); }
+  releasePointerCapture(id) { this.captured.delete(id); }
+  hasPointerCapture(id) { return this.captured.has(id); }
+}
+
+function withDom(fn) {
+  globalThis.document = { createElement: (t) => new FakeEl(t), createTextNode: (t) => ({ t }) };
+  try { fn(); } finally { delete globalThis.document; }
+}
+
+test("seekBar keys step, jump and clamp to 0..max, and the bar follows without set()", () => withDom(() => {
+  const got = [];
+  const bar = seekBar({ max: 10, value: 9, ariaLabel: "Seek", onInput: (v) => got.push(v) });
+  const fill = bar.children[0];
+  assert.equal(bar.fire("keydown", { key: "ArrowRight" }).prevented, true);
+  assert.equal(bar.fire("keydown", { key: "ArrowUp" }).prevented, true); // already at max: no event
+  bar.fire("keydown", { key: "PageDown" });
+  bar.fire("keydown", { key: "PageDown" });
+  bar.fire("keydown", { key: "End" });
+  bar.fire("keydown", { key: "Home" });
+  assert.equal(bar.fire("keydown", { key: "a" }).prevented, false);
+  assert.deepEqual(got, [10, 0, 10, 0]);
+  assert.equal(fill.style.width, "0%");
+  assert.equal(bar.attrs["aria-valuenow"], "0");
+  bar.set(25);
+  assert.equal(bar.attrs["aria-valuenow"], "10");
+}));
+
+test("seekBar is inert when disabled or max is 0", () => withDom(() => {
+  const got = [];
+  const bar = seekBar({ max: 0, onInput: (v) => got.push(v) });
+  assert.equal(bar.tabIndex, -1);
+  assert.equal(bar.attrs["aria-disabled"], "true");
+  bar.fire("keydown", { key: "End" });
+  bar.setMax(5);
+  assert.equal(bar.tabIndex, 0);
+  assert.equal(bar.attrs["aria-disabled"], undefined);
+  bar.setDisabled(true);
+  bar.fire("pointerdown", { button: 0, pointerId: 1, clientX: 50 });
+  assert.deepEqual(got, []);
+}));
+
+test("seekBar drags with pointer capture, places marks and shows the tip", () => withDom(() => {
+  const log = [];
+  const bar = seekBar({
+    max: 10,
+    marks: [{ value: 5, title: "Key" }],
+    format: (v) => `F${v}`,
+    onInput: (v) => log.push(v),
+    onScrubStart: () => log.push("start"),
+    onScrubEnd: () => log.push("end"),
+  });
+  const mark = bar.children.find((c) => c.className === "daw-seek-mark");
+  assert.equal(mark.style.left, "50%");
+  assert.equal(mark.attrs.title, "Key");
+  bar.fire("pointerdown", { button: 0, pointerId: 1, clientX: 30 });
+  assert.equal(bar.classList.contains("is-dragging"), true);
+  bar.fire("pointermove", { pointerId: 1, clientX: 140 });
+  const tip = bar.children.find((c) => c.className === "daw-seek-tip");
+  assert.equal(tip.textContent, "F10");
+  assert.equal(tip.style.left, "94%");
+  bar.fire("pointerup", { pointerId: 1 });
+  assert.deepEqual(log, ["start", 3, 10, "end"]);
+  assert.equal(bar.classList.contains("is-dragging"), false);
+  bar.setMax(20);
+  assert.equal(mark.style.left, "25%");
+  bar.fire("pointerleave");
+  assert.equal(tip.parentNode, null);
+}));
 
 test("CSS has no hex colours outside the token and theme files", () => {
   const offenders = [];

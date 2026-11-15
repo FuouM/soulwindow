@@ -14,8 +14,13 @@
  *   .daw-track-header(s)         timeline lane headers beside a canvas
  *   .daw-statusbar / .daw-status-cell / .daw-status-dot
  *   .daw-chip                    small coloured status chips
+ *   .daw-btn-ok/-warn/-err       tone modifiers on .win-button and .daw-tbtn (+ .daw-btn-ghost: no fill until hover)
+ *   .daw-beat-dot(--on, --down)  square beat indicator
+ *   .daw-range                   flat input[type=range] (volume, gain)
+ *   .daw-cm-host                 CodeMirror 6 host and its autocomplete popup (.daw-cm-numbered: numbered options)
+ * The seek bar markup is built by SeekBar (soulwindow/solid/pro) or seekBar() (soulwindow/vanilla).
  * Buttons, inputs, group boxes and dialogs inside editors are the normal .win-button, .input-field,
- * .group-box and .ds-modal-*; do not add .daw-btn copies. */
+ * .group-box and .ds-modal-*; do not add .daw-btn copies (the .daw-btn-* tone modifiers go on them). */
 @layer pro {
   .daw-app {
     display: flex;
@@ -86,6 +91,11 @@
     background: var(--sys-menu-bg);
     border: 1px solid var(--sys-menu-border);
     box-shadow: var(--sw-menu-shadow);
+  }
+  /* A menu at the right end of the bar opens leftwards, so its pop-up stays in the window. */
+  .daw-menubar-right .daw-menu-pop {
+    left: auto;
+    right: 0;
   }
   .daw-menu-item {
     display: grid;
@@ -233,6 +243,38 @@
   .daw-tbtn--accent:hover:not(:disabled) {
     background: var(--sys-button-primary-hover);
     border-color: var(--sys-button-primary-hover);
+  }
+
+  /* ── Tone modifiers for .win-button and .daw-tbtn (Render = err, Encode = ok …) ──
+   * `:not(:disabled)` leaves the disabled look to the button's own :disabled rule. */
+  :is(.win-button, .daw-tbtn).daw-btn-ok:not(:disabled) {
+    background: var(--sw-ok-bg);
+    border-color: var(--sw-ok);
+    color: var(--sw-ok);
+  }
+  :is(.win-button, .daw-tbtn).daw-btn-ok:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--sw-ok) 22%, var(--sw-ok-bg));
+  }
+  :is(.win-button, .daw-tbtn).daw-btn-warn:not(:disabled) {
+    background: var(--sw-warn-bg);
+    border-color: var(--sw-warn);
+    color: var(--sw-warn);
+  }
+  :is(.win-button, .daw-tbtn).daw-btn-warn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--sw-warn) 22%, var(--sw-warn-bg));
+  }
+  :is(.win-button, .daw-tbtn).daw-btn-err:not(:disabled) {
+    background: var(--sw-err-bg);
+    border-color: var(--sw-err);
+    color: var(--sw-err);
+  }
+  :is(.win-button, .daw-tbtn).daw-btn-err:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--sw-err) 22%, var(--sw-err-bg));
+  }
+  /* Ghost: no fill or edge until hovered, focused or pressed. Combine with a tone (.daw-btn-err.daw-btn-ghost). */
+  :is(.win-button, .daw-tbtn).daw-btn-ghost:not(:hover, :focus-visible, :active) {
+    background: transparent;
+    border-color: transparent;
   }
 
   /* ── VFD readout. Dark glass in every theme, by design. ── */
@@ -646,5 +688,207 @@
     color: var(--sys-highlight-text);
     border-color: var(--sys-primary-border);
     background: var(--sys-highlight-bg);
+  }
+
+  /* ── Beat indicator (metronome, monitor): a row of square dots, one lit per beat ── */
+  .daw-beat-dot {
+    display: inline-block;
+    flex: none;
+    width: 10px;
+    height: 10px;
+    box-sizing: border-box;
+    background: var(--sys-button-bg);
+    border: 1px solid var(--sys-border-dark);
+  }
+  .daw-beat-dot--on {
+    background: var(--sys-highlight-bg);
+    border-color: var(--sys-highlight-bg);
+  }
+  .daw-beat-dot--down.daw-beat-dot--on {
+    background: var(--sw-warn);
+    border-color: var(--sw-warn);
+  }
+
+  /* ── Flat range slider (volume, gain). The app sets the width. ── */
+  .daw-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .daw-range:focus {
+    outline: none;
+  }
+  .daw-range:focus-visible {
+    outline: 1px solid var(--sw-focus-ring);
+    outline-offset: 1px;
+  }
+  .daw-range:disabled {
+    opacity: var(--sw-disabled-opacity);
+    cursor: default;
+  }
+  .daw-range::-webkit-slider-runnable-track {
+    height: 4px;
+    background: var(--sys-window-bg);
+    border: 1px solid var(--sys-border-dark);
+  }
+  .daw-range::-moz-range-track {
+    height: 4px;
+    background: var(--sys-window-bg);
+    border: 1px solid var(--sys-border-dark);
+  }
+  .daw-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    width: 8px;
+    height: 16px;
+    margin-top: -6px;
+    background: var(--sys-button-bg);
+    border: 1px solid var(--sys-button-border);
+    border-radius: 0;
+  }
+  .daw-range::-moz-range-thumb {
+    box-sizing: border-box;
+    width: 8px;
+    height: 16px;
+    background: var(--sys-button-bg);
+    border: 1px solid var(--sys-button-border);
+    border-radius: 0;
+  }
+  .daw-range:hover:not(:disabled)::-webkit-slider-thumb {
+    border-color: var(--sys-border-focus);
+  }
+  .daw-range:hover:not(:disabled)::-moz-range-thumb {
+    border-color: var(--sys-border-focus);
+  }
+
+  /* ── CodeMirror 6 host: put the editor inside, it fills the host ──
+   * CodeMirror injects its base theme as unlayered CSS, which beats every layer. Only the
+   * properties that base theme sets carry !important here; nothing else does. The reset's
+   * `* { font-family; font-size }` is undone with zero-specificity `inherit` so the editor reads
+   * one mono font from the host. */
+  .daw-cm-host {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+    background: var(--sys-window-bg);
+    font: var(--font-md) / 1.45 var(--sw-font-mono);
+  }
+  :where(.daw-cm-host .cm-editor, .daw-cm-host .cm-editor *) {
+    font-family: inherit;
+    font-size: inherit;
+  }
+  .daw-cm-host .cm-editor {
+    height: 100%;
+    background: var(--sys-window-bg) !important;
+    color: var(--sys-window-text) !important;
+  }
+  .daw-cm-host .cm-editor.cm-focused {
+    outline: none !important;
+  }
+  .daw-cm-host .cm-scroller {
+    overflow: auto !important;
+    font-family: inherit !important;
+    line-height: inherit !important;
+    scrollbar-gutter: stable;
+  }
+  .daw-cm-host .cm-content {
+    caret-color: var(--sys-border-focus) !important;
+  }
+  .daw-cm-host .cm-cursor,
+  .daw-cm-host .cm-dropCursor {
+    border-left-color: var(--sys-border-focus) !important;
+  }
+  .daw-cm-host .cm-selectionBackground {
+    background: var(--sw-cm-selection) !important;
+  }
+  .daw-cm-host .cm-activeLine {
+    background: var(--sw-cm-active-line) !important;
+  }
+  .daw-cm-host .cm-gutters {
+    background: var(--sys-control-bg) !important;
+    color: var(--sys-text-muted) !important;
+    border-right: 1px solid var(--sys-border-dark) !important;
+    user-select: none;
+  }
+  .daw-cm-host .cm-activeLineGutter {
+    background: var(--sw-cm-active-line) !important;
+    color: var(--sys-window-text);
+  }
+
+  /* Autocomplete popup (inside the editor, or wherever tooltips({ parent }) puts it). */
+  .cm-tooltip.cm-tooltip-autocomplete {
+    z-index: var(--z-tooltip) !important;
+    background: var(--sys-window-bg) !important;
+    color: var(--sys-window-text);
+    border: 1px solid var(--sys-border-dark) !important;
+    border-radius: 0;
+    box-shadow: var(--sw-menu-shadow);
+    font: var(--font-md) / 1.2 var(--sw-font-mono);
+  }
+  :where(.cm-tooltip-autocomplete *) {
+    font-family: inherit;
+    font-size: inherit;
+  }
+  .cm-tooltip.cm-tooltip-autocomplete > ul {
+    max-height: 220px !important;
+    padding: 4px 0 !important;
+    font-family: inherit !important;
+  }
+  .cm-tooltip.cm-tooltip-autocomplete > ul > li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px !important;
+    line-height: inherit !important;
+    color: inherit;
+    text-align: left;
+  }
+  .cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected] {
+    background: var(--sys-highlight-bg) !important;
+    color: var(--sys-highlight-text) !important;
+  }
+  .cm-completionLabel {
+    font-weight: 600;
+  }
+  .cm-completionDetail {
+    margin-left: auto !important;
+    padding-left: 14px;
+    font-style: normal !important;
+    font-size: var(--font-sm);
+    color: var(--sys-text-muted);
+  }
+  .cm-tooltip-autocomplete li[aria-selected] .cm-completionDetail {
+    color: inherit;
+    opacity: 0.85;
+  }
+  /* Opt-in numbering (for Alt+1…9 style pickers): put .daw-cm-numbered on the host or the tooltip parent. */
+  .daw-cm-numbered .cm-tooltip-autocomplete > ul {
+    counter-reset: daw-cm-option;
+  }
+  .daw-cm-numbered .cm-tooltip-autocomplete > ul > li::before {
+    counter-increment: daw-cm-option;
+    content: counter(daw-cm-option);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    min-width: 18px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: var(--radius-1);
+    background: var(--sys-control-bg);
+    color: var(--sys-text-secondary);
+    font-size: var(--font-xs);
+    font-weight: 600;
+  }
+  .daw-cm-numbered .cm-tooltip-autocomplete > ul > li[aria-selected]::before {
+    background: color-mix(in srgb, var(--sys-highlight-text) 28%, transparent);
+    color: inherit;
   }
 }

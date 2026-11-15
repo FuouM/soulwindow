@@ -22,7 +22,7 @@ One colour (a preset or any hex) drives primary buttons, selection, toggles, foc
 
 ### Editor layer (DAW / NLE)
 
-`css/pro/daw.css` adds the editor chrome Lyric-Sync and probable-video-editor share: menu bar, transport with a VFD readout, docks and tabs, a timeline frame whose canvas colours come from `--tl-*` tokens, and a status bar. It follows the theme and accent like everything else.
+`css/pro/daw.css` adds the editor chrome Lyric-Sync and probable-video-editor share: menu bar, transport with a VFD readout, docks and tabs, a timeline frame whose canvas colours come from `--tl-*` tokens, a seek bar, a status bar, and the smaller editor parts: tone buttons (`.daw-btn-ok/-warn/-err`, `.daw-btn-ghost`), beat dots (`.daw-beat-dot`), a flat range slider (`.daw-range`) and a CodeMirror 6 host with its autocomplete popup (`.daw-cm-host`). It follows the theme and accent like everything else.
 
 ![Editor layout in the dark theme: menu bar, transport with seven-segment clock, project dock, program monitor, inspector, timeline and status bar](docs/images/editor-dark.png)
 
@@ -43,18 +43,18 @@ To try it yourself: `npm install && npm run dev` opens the showcase, with switch
 
 ```
 css/          tokens, themes, density, reset, base, components, mobile, utilities   (framework-free)
-css/pro/      daw.css: menu bar, transport, VFD readout, docks, tabs, splitter, timeline frame, status bar
+css/pro/      daw.css: menu bar, transport, VFD readout, seek bar, docks, tabs, splitter, timeline frame, status bar, chips, tone buttons, beat dots, range, CodeMirror host
 runtime/      theme / accent / density controller, pre-paint boot script, Vite plugin, readTokens(), seg7, isPointOver() (drag-drop hit test)
 solid/        Solid components: Button, GroupBox, InputField, SubTabs, Modal, ListItem, SettingsRow, Feedback (Loading, Banner, ProgressBar, DropZone …)
-solid/pro/    MenuBar, LcdDigits
-vanilla/      DOM factories with the same markup, for apps without a framework
+solid/pro/    MenuBar, LcdDigits, SeekBar
+vanilla/      DOM factories with the same markup, for apps without a framework (button, groupBox, toggle, segmented, banner, progressBar, dropZone, seekBar …)
 showcase/     every component in every theme and density (npm run dev)
 ```
 
 ## Use it
 
 ```sh
-npm install github:FuouM/soulwindow#v0.4.1     # or: bun add github:FuouM/soulwindow#v0.4.1
+npm install github:FuouM/soulwindow#v0.5.0     # or: bun add github:FuouM/soulwindow#v0.5.0
 ```
 
 CSS, `runtime/` and `vanilla/` are plain files. The Solid components ship as TypeScript sources: types and the `solid` export condition point at `solid/*.ts(x)`, which the app's vite-plugin-solid compiles, so no build step is needed (Bun does not run a git dependency's `prepare` with its devDependencies, and does not need to). npm still runs `prepare`, which builds `dist/esm` for bundlers without the `solid` condition.
@@ -129,7 +129,7 @@ plus its own `:root[data-theme="windows7"] { … }` tokens and chrome CSS in `@l
 | Prefix | What | Notes |
 |---|---|---|
 | `--sys-*` | system colours | The public colour API. Use these. |
-| `--sw-*` | density sizes (`--sw-progress-h`, `--sw-checker-size` …), component tokens (`--sw-checker-a/b` …), generic status (`--sw-ok/warn/err`) | New in SoulWindow. |
+| `--sw-*` | density sizes (`--sw-progress-h`, `--sw-checker-size` …), component tokens (`--sw-checker-a/b`, `--sw-cm-active-line`, `--sw-cm-selection` …), generic status (`--sw-ok/warn/err` + `-bg`) | New in SoulWindow. |
 | `--space-*`, `--font-*`, `--radius-*`, `--z-*` | scales | `--z-*` is the only allowed source of global z-index. |
 | `--ds-*` | status / danger colours | DynastyReader's names, kept for compatibility. Do not add more. |
 | `--tag-*` | tag taxonomy for `.tag-pill` | |
