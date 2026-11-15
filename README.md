@@ -54,7 +54,7 @@ showcase/     every component in every theme and density (npm run dev)
 ## Use it
 
 ```sh
-npm install github:FuouM/soulwindow#v0.5.0     # or: bun add github:FuouM/soulwindow#v0.5.0
+npm install github:FuouM/soulwindow#v0.5.1     # or: bun add github:FuouM/soulwindow#v0.5.1
 ```
 
 CSS, `runtime/` and `vanilla/` are plain files. The Solid components ship as TypeScript sources: types and the `solid` export condition point at `solid/*.ts(x)`, which the app's vite-plugin-solid compiles, so no build step is needed (Bun does not run a git dependency's `prepare` with its devDependencies, and does not need to). npm still runs `prepare`, which builds `dist/esm` for bundlers without the `solid` condition.

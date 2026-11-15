@@ -64,6 +64,10 @@ Found while doing it (DR branch `feat/soulwindow`):
 5. `plugins/dynasty-scans`: delete its style fork and import `soulwindow/css` plus DynastyReader's view CSS; longer term, share DR's view components instead of a second copy.
 6. Since v0.3.0 SoulWindow ships the toolbox drag-and-drop styling: `.toolbox-drop-zone` → `.ds-drop-zone`, `.toolbox-drop-icon` → `.ds-drop-icon`, `.toolbox-drop-active` → `.ds-drop-active` (on the source group, or on the zone itself). The `rgba(0, 120, 215, …)` tints are now `color-mix` with `--sys-border-focus`, so they follow the accent, and the `!important` on the border is gone: since v0.3.2 the dashed edge is an inset outline drawn over the group's border, so the box never changes size. Keep `margin-top` in `@layer app`. `ToolboxView`'s `isOverSourceGroup` is `isPointOver(sourceGroup, drop.position)` from `soulwindow/runtime`; the `onDragDropEvent` wiring stays in the app. Markup: `<DropZone>Drop an image here</DropZone>` (Solid) or `dropZone({ text })` (vanilla). The indeterminate bar (`.progress-indeterminate`, `@keyframes progress-slide`, 40% bar) is `.ds-progress-track--indeterminate` (or `<ProgressBar />` without a value).
 
+## Fonts inherit (v0.5.1)
+
+Before v0.5.1 `reset.css` set `font-family` and `font-size` on every element (`* { … }`). A component that set its own font did not pass it on: the `<strong>` in a `.daw-chip`, the spans in a `.group-box-title`, a wrapper in a `.daw-lcd-sub` and the words of a subtitle line fell back to 12px Segoe UI. Since v0.5.1 the font is set on `<html>` and inherited; form controls get `font: inherit`. In an app, delete the `font-size: inherit` / `font: inherit` workarounds written for the old reset, and check text that relied on being 12px inside a parent with another font.
+
 ## After all four
 
 - Add the "In an app" section of SoulWindow's AGENTS.md to each app's AGENTS.md / CLAUDE.md.

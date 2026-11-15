@@ -343,20 +343,17 @@
     --lcd-glow: var(--lcd-amber-glow);
     --lcd-ghost: var(--lcd-amber-ghost);
   }
-  /* `font-size: inherit` beats the reset's `* { font-size }`, so the em-based cells follow the readout. */
   .daw-seg7-row {
     display: inline-flex;
     align-items: flex-end;
     gap: 0.08em;
     height: 1em;
-    font-size: inherit;
     transform: skewX(-7deg);
     color: var(--lcd-on);
   }
   .daw-seg7 {
     height: 100%;
     width: 0.6em;
-    font-size: inherit;
     overflow: visible;
     fill: var(--lcd-ghost);
   }
@@ -779,10 +776,6 @@
     background: var(--sys-window-bg);
     font: var(--font-md) / 1.45 var(--sw-font-mono);
   }
-  :where(.daw-cm-host .cm-editor, .daw-cm-host .cm-editor *) {
-    font-family: inherit;
-    font-size: inherit;
-  }
   .daw-cm-host .cm-editor {
     height: 100%;
     background: var(--sys-window-bg) !important;
@@ -830,10 +823,6 @@
     border-radius: 0;
     box-shadow: var(--sw-menu-shadow);
     font: var(--font-md) / 1.2 var(--sw-font-mono);
-  }
-  :where(.cm-tooltip-autocomplete *) {
-    font-family: inherit;
-    font-size: inherit;
   }
   .cm-tooltip.cm-tooltip-autocomplete > ul {
     max-height: 220px !important;
