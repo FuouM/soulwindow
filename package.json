@@ -1,6 +1,6 @@
 {
   "name": "soulwindow",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "SoulWindow: the WinForms-style design system shared by DynastyReader, Lyric-Sync, probable-video-editor and Project-Curator.",
   "license": "MIT",
   "type": "module",
@@ -28,18 +28,18 @@
       "default": "./runtime/vite.js"
     },
     "./solid": {
-      "types": "./dist/types/index.d.ts",
-      "solid": "./dist/source/index.js",
+      "types": "./solid/index.ts",
+      "solid": "./solid/index.ts",
       "default": "./dist/esm/index.js"
     },
     "./solid/pro": {
-      "types": "./dist/types/pro/index.d.ts",
-      "solid": "./dist/source/pro/index.js",
+      "types": "./solid/pro/index.ts",
+      "solid": "./solid/pro/index.ts",
       "default": "./dist/esm/pro/index.js"
     },
     "./solid/store": {
-      "types": "./dist/types/store.d.ts",
-      "solid": "./dist/source/store.js",
+      "types": "./solid/store.ts",
+      "solid": "./solid/store.ts",
       "default": "./dist/esm/store.js"
     },
     "./vanilla": {
@@ -50,7 +50,7 @@
   },
   "scripts": {
     "dev": "vite showcase",
-    "build": "npm run clean && tsc -p tsconfig.build.json && vite build --config vite.lib.config.ts",
+    "build": "npm run clean && vite build --config vite.lib.config.ts",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "prepare": "npm run build",
     "build:showcase": "vite build showcase",

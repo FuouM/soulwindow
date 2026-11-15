@@ -54,10 +54,10 @@ showcase/     every component in every theme and density (npm run dev)
 ## Use it
 
 ```sh
-npm install github:FuouM/soulwindow#v0.3.0     # or: bun add github:FuouM/soulwindow#v0.3.0
+npm install github:FuouM/soulwindow#v0.4.1     # or: bun add github:FuouM/soulwindow#v0.4.1
 ```
 
-Installing from git runs `prepare`, which builds `dist/` (the Solid components). CSS, `runtime/` and `vanilla/` are plain files and need no build.
+CSS, `runtime/` and `vanilla/` are plain files. The Solid components ship as TypeScript sources: types and the `solid` export condition point at `solid/*.ts(x)`, which the app's vite-plugin-solid compiles, so no build step is needed (Bun does not run a git dependency's `prepare` with its devDependencies, and does not need to). npm still runs `prepare`, which builds `dist/esm` for bundlers without the `solid` condition.
 
 ```ts
 // vite.config.ts: paints the saved theme before first paint (no white flash in dark mode)
@@ -150,7 +150,7 @@ Put app styles in `@layer app { … }`. Unlayered CSS beats every layer, so it o
 ```sh
 npm install
 npm run dev              # showcase on localhost
-npm run build            # dist/: esm (compiled Solid), source (JSX kept, for the `solid` export condition), types
+npm run build            # dist/esm: compiled Solid, for consumers without the `solid` export condition
 npm run check            # typecheck + tests + build (tests include: no hex colours outside tokens/themes)
 npm run build:showcase && npm run screenshots   # PNGs of every theme × density into screenshots/
 npm run build:showcase && npm run readme-images # regenerate the images in docs/images/ for this README
