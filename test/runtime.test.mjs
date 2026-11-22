@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createColorKit } from "../runtime/color-kit.js";
 import { bootScript } from "../runtime/boot.js";
-import { seg7Html } from "../runtime/seg7.js";
+import { seg7Html, seg7Set } from "../runtime/seg7.js";
 import { isPointOver } from "../runtime/drop.js";
 import { seekBar } from "../vanilla/index.js";
 import { readFileSync, readdirSync } from "node:fs";
@@ -46,6 +46,46 @@ test("seg7Html draws digits and escapes text", () => {
   assert.match(html, /daw-seg7-narrow/);
   assert.match(html, /&lt;/);
   assert.equal((html.match(/<polygon/g) ?? []).length, 7);
+});
+
+/** A fake readout container: innerHTML parses the seg7Html cells into fake elements (all seg7Set reads and writes). */
+function fakeReadout() {
+  return {
+    writes: 0,
+    firstElementChild: null,
+    set innerHTML(html) {
+      this.writes++;
+      const attr = (k) => (new RegExp(`${k}="([^"]*)"`).exec(html) ?? [])[1];
+      const cells = [...html.matchAll(/<svg class="daw-seg7"[^>]*>(.*?)<\/svg>|<svg class="daw-seg7 daw-seg7-narrow".*?<\/svg>|<span class="daw-seg7-text">(.*?)<\/span>/g)].map((m) => {
+        if (m[2] !== undefined) return { textContent: m[2] };
+        const polys = [...(m[1] ?? "").matchAll(/<polygon[^>]*?(class="daw-seg7-on")?\/>/g)].map((p) => {
+          const on = new Set(p[1] ? ["daw-seg7-on"] : []);
+          return { classList: { toggle: (c, f) => (f ? on.add(c) : on.delete(c)), contains: (c) => on.has(c) } };
+        });
+        return { children: polys };
+      });
+      const a = { "data-seg7": attr("data-seg7"), "aria-label": attr("aria-label") };
+      this.firstElementChild = { className: attr("class"), children: cells, getAttribute: (k) => a[k], setAttribute: (k, v) => (a[k] = v) };
+    },
+  };
+}
+const litOf = (cell) => cell.children.map((p) => (p.classList.contains("daw-seg7-on") ? 1 : 0)).join("");
+
+test("seg7Set switches segments in place and rebuilds only when the cells change", () => {
+  const el = fakeReadout();
+  seg7Set(el, "01:2");
+  assert.equal(el.writes, 1);
+  const row = el.firstElementChild;
+  seg7Set(el, "18:8");
+  assert.equal(el.writes, 1, "same cells: no new markup");
+  assert.equal(el.firstElementChild, row);
+  assert.equal(row.getAttribute("aria-label"), "18:8");
+  assert.equal(litOf(row.children[0]), "0110000"); // 1: b c
+  assert.equal(litOf(row.children[1]), "1111111"); // 8: all
+  seg7Set(el, "18.8");
+  assert.equal(el.writes, 2, "a colon became a dot: new markup");
+  seg7Set(el, "18.8", "daw-lcd-amber");
+  assert.equal(el.writes, 3, "another class: new markup");
 });
 
 test("isPointOver hit-tests physical or CSS pixels against an element and its children", () => {

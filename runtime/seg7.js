@@ -1,6 +1,8 @@
 // SoulWindow pro — seven-segment geometry for the .daw-lcd readout. Every cell draws all segments;
 // unlit ones show as faint ghosts, like a real VFD. Digits, "-", ":", "." and spaces are drawn; any
 // other character is plain text. solid/pro/LcdDigits.tsx and seg7Html() both render from this.
+// seg7Set() updates a readout in place: a readout that changes every frame (a playhead time) must not
+// rebuild its SVG cells, or the browser lays out and repaints them all each frame.
 
 export var SEGS = ["a", "b", "c", "d", "e", "f", "g"];
 
@@ -37,22 +39,57 @@ function esc(s) {
   });
 }
 
+/** The cell kind of a character: "d" drawn digit, ":" colon, "." dot, "t" plain text. */
+function kind(ch) {
+  return ch === ":" ? ":" : ch === "." ? "." : Object.prototype.hasOwnProperty.call(LIT, ch) ? "d" : "t";
+}
+
 /** Markup for a readout, for apps that build HTML strings. */
 export function seg7Html(text, cls) {
-  var parts = [];
-  Array.from(String(text)).forEach(function (ch) {
-    if (ch === ":") parts.push(COLON);
-    else if (ch === ".") parts.push(DOT);
-    else if (Object.prototype.hasOwnProperty.call(LIT, ch)) {
+  var chars = Array.from(String(text));
+  var parts = chars.map(function (ch) {
+    if (ch === ":") return COLON;
+    if (ch === ".") return DOT;
+    if (kind(ch) === "d") {
       var lit = LIT[ch];
-      parts.push(
+      return (
         '<svg class="daw-seg7" viewBox="0 0 12 20" aria-hidden="true">' +
-          SEGS.map(function (s) {
-            return '<polygon points="' + SHAPE[s] + '"' + (lit.indexOf(s) >= 0 ? ' class="daw-seg7-on"' : "") + "/>";
-          }).join("") +
-          "</svg>",
+        SEGS.map(function (s) {
+          return '<polygon points="' + SHAPE[s] + '"' + (lit.indexOf(s) >= 0 ? ' class="daw-seg7-on"' : "") + "/>";
+        }).join("") +
+        "</svg>"
       );
-    } else parts.push('<span class="daw-seg7-text">' + esc(ch) + "</span>");
+    }
+    return '<span class="daw-seg7-text">' + esc(ch) + "</span>";
   });
-  return '<span class="daw-seg7-row' + (cls ? " " + esc(cls) : "") + '" role="img" aria-label="' + esc(text) + '">' + parts.join("") + "</span>";
+  return (
+    '<span class="daw-seg7-row' + (cls ? " " + esc(cls) : "") + '" role="img" aria-label="' + esc(text) + '" data-seg7="' +
+    chars.map(kind).join("") + '">' + parts.join("") + "</span>"
+  );
+}
+
+/**
+ * Show `text` in `el` (the readout's container). When `el` already holds a readout with the same cells (the same
+ * kind of character at each place, the same class), it only switches the segments and the text that changed: no
+ * new elements, no layout. Otherwise it writes the markup of seg7Html().
+ */
+export function seg7Set(el, text, cls) {
+  text = String(text);
+  var chars = Array.from(text);
+  var shape = chars.map(kind).join("");
+  var row = el.firstElementChild;
+  if (!row || row.getAttribute("data-seg7") !== shape || row.className !== "daw-seg7-row" + (cls ? " " + cls : "")) {
+    el.innerHTML = seg7Html(text, cls);
+    return;
+  }
+  if (row.getAttribute("aria-label") === text) return;
+  row.setAttribute("aria-label", text);
+  var cells = row.children;
+  chars.forEach(function (ch, i) {
+    var cell = cells[i];
+    if (shape[i] === "d") {
+      var lit = LIT[ch], polys = cell.children;
+      for (var k = 0; k < SEGS.length; k++) polys[k].classList.toggle("daw-seg7-on", lit.indexOf(SEGS[k]) >= 0);
+    } else if (shape[i] === "t" && cell.textContent !== ch) cell.textContent = ch;
+  });
 }
