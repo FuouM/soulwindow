@@ -44,7 +44,7 @@ To try it yourself: `npm install && npm run dev` opens the showcase, with switch
 ```
 css/          tokens, themes, density, reset, base, components, mobile, utilities   (framework-free)
 css/pro/      daw.css: menu bar, transport, VFD readout, seek bar, docks, tabs, splitter, timeline frame, status bar, chips, tone buttons, beat dots, range, CodeMirror host
-runtime/      theme / accent / density controller, pre-paint boot script, Vite plugin, readTokens(), seg7, isPointOver() (drag-drop hit test)
+runtime/      theme / accent / density controller, pre-paint boot script, Vite plugin, readTokens(), seg7Html() / seg7Set(), isPointOver() (drag-drop hit test)
 solid/        Solid components: Button, GroupBox, InputField, SubTabs, Modal, ListItem, SettingsRow, Feedback (Loading, Banner, ProgressBar, DropZone …)
 solid/pro/    MenuBar, LcdDigits, SeekBar
 vanilla/      DOM factories with the same markup, for apps without a framework (button, groupBox, toggle, segmented, banner, progressBar, dropZone, seekBar …)
